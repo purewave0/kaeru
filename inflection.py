@@ -14,7 +14,7 @@ class AdjectiveType(Enum):
     I = 'adjective-i'
     """い-adjective."""
     I_YOI_II = 'adjective-i-yoi-ii'
-    """い-adjective with the 良い ending written as いい."""
+    """いい, and any other い-adjective with the 良い ending written as いい."""
     NA = 'adjective-na'
     """な-adjective."""
 
@@ -28,7 +28,7 @@ class VerbType(Enum):
     GODAN = 'verb-godan'
     """う-verbs."""
     ICHIDAN_IRREGULAR = 'verb-ichidan-irregular'
-    """する and 来る."""
+    """する and 来る/くる, and any other verbs ending with those irregular forms."""
 
 
 class AdjectiveInflection:
