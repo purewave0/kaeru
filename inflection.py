@@ -95,15 +95,16 @@ class AdjectiveInflection:
         """
         tense = random.choice(list(AdjectiveInflection.Tense))
         polarity = random.choice(list(AdjectiveInflection.Polarity))
-        valid_features = ['tense', 'polarity']
+        valid_features = ['tense', 'polarity', 'copula_politeness']
 
-        copula_politeness = None
+        copula_politeness_choices = [AdjectiveInflection.CopulaPoliteness.POLITE]
+
         accepts_plain_copula = adjective_type is AdjectiveType.NA
         if accepts_plain_copula:
-            copula_politeness = random.choice(
-                list(AdjectiveInflection.CopulaPoliteness)
+            copula_politeness_choices.append(
+                AdjectiveInflection.CopulaPoliteness.PLAIN
             )
-            valid_features.append('copula_politeness')
+        copula_politeness = random.choice(copula_politeness_choices)
 
         required_nondefault_feature = random.choice(valid_features)
         # force at least one nondefault value
