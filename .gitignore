@@ -1,4 +1,3 @@
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
 *$py.class
@@ -11,3 +10,6 @@ __pycache__/
 env/
 
 .ropeproject
+
+# the vocab JSON built by make-vocab.py
+vocab.json
