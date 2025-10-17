@@ -20,6 +20,8 @@ import conjugator
 class Kaeru(QtWidgets.QWidget):
     word_to_conjugate: QtWidgets.QLabel
     """Shows the word to be conjugated, in dictionary form."""
+    kana_reading: QtWidgets.QLabel
+    """The kana reading, if needed, of the word to conjugate."""
     word_type: QtWidgets.QLabel
     """Shows the type of word (see AdjectiveType, VerbType)."""
     conjugation: QtWidgets.QLabel
@@ -36,6 +38,10 @@ class Kaeru(QtWidgets.QWidget):
         super().__init__()
 
         self.word_to_conjugate = QtWidgets.QLabel(
+            '…',
+            alignment=QtCore.Qt.AlignmentFlag.AlignCenter
+        )
+        self.kana_reading = QtWidgets.QLabel(
             '…',
             alignment=QtCore.Qt.AlignmentFlag.AlignCenter
         )
@@ -59,9 +65,15 @@ class Kaeru(QtWidgets.QWidget):
         self.answer_button.clicked.connect(self.process_answer)
         self.answer.returnPressed.connect(self.answer_button.click)
 
+        # fonts
+
         large_font = self.word_to_conjugate.font()
         large_font.setPointSize(64)
         self.word_to_conjugate.setFont(large_font)
+
+        small_font = self.kana_reading.font()
+        small_font.setPointSize(14)
+        self.kana_reading.setFont(small_font)
 
         medium_font = self.word_type.font()
         medium_font.setPointSize(28)
@@ -69,6 +81,8 @@ class Kaeru(QtWidgets.QWidget):
         self.conjugation.setFont(medium_font)
         self.answer.setFont(medium_font)
         self.answer_button.setFont(medium_font)
+
+        # layout
 
         self.answer.setMaximumWidth(600)
         self.answer.setFont(medium_font)
@@ -79,6 +93,7 @@ class Kaeru(QtWidgets.QWidget):
 
         self.layout.addStretch()
         self.layout.addWidget(self.word_to_conjugate)
+        self.layout.addWidget(self.kana_reading)
         self.layout.addWidget(self.word_type)
         self.layout.addStretch()
         self.layout.addWidget(self.conjugation)
@@ -94,8 +109,13 @@ class Kaeru(QtWidgets.QWidget):
         """Ask to conjugate a new random word."""
         random_word = random.choice(self.words)
         dictionary_form_word: str = random_word['word']
+        word_kana_reading: str | None = random_word['kana']
 
         self.word_to_conjugate.setText(dictionary_form_word)
+        self.kana_reading.setText(
+            f'（{word_kana_reading}）'
+            if word_kana_reading is not None else '　'  # still occupy space
+        )
         self.answer.setText('')
 
         type_str = random_word['type']
