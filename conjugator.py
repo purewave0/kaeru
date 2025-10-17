@@ -20,7 +20,7 @@ def _conjugate_i_adjective(
     else:
         conjugated += 'い'
 
-    if inflection.copula_politeness is AdjectiveInflection.CopulaPoliteness.POLITE:
+    if inflection.politeness is AdjectiveInflection.Politeness.POLITE:
         conjugated += 'です'
 
     return conjugated
@@ -36,7 +36,7 @@ def _conjugate_i_yoi_ii_adjective(
     is_default = (
         inflection.tense is AdjectiveInflection.Tense.NONPAST
         and inflection.polarity is AdjectiveInflection.Polarity.POSITIVE
-        and inflection.copula_politeness is None
+        and inflection.politeness is None
     )
     if is_default:
         return conjugated
@@ -51,7 +51,7 @@ def _conjugate_na_adjective(
     """Return the given な-adjective in the given conjugation."""
     conjugated = adjective
 
-    if inflection.copula_politeness is AdjectiveInflection.CopulaPoliteness.POLITE:
+    if inflection.politeness is AdjectiveInflection.Politeness.POLITE:
         conjugated += 'で'
         if inflection.polarity is AdjectiveInflection.Polarity.POSITIVE:
             if inflection.tense is AdjectiveInflection.Tense.NONPAST:

@@ -32,7 +32,7 @@ class VerbType(Enum):
 
 
 class AdjectiveInflection:
-    """Inflection (tense, polarity, copula politeness) for an adjective."""
+    """Inflection (tense, polarity, politeness) for an adjective."""
     class Tense(Enum):
         """The time of the state."""
         NONPAST = 'nonpast'
@@ -47,8 +47,8 @@ class AdjectiveInflection:
         NEGATIVE = 'negative'
         """E.g. 遅くない, 完璧じゃない."""
 
-    class CopulaPoliteness(Enum):
-        """The politeness of the copula (if any) after the adjective.
+    class Politeness(Enum):
+        """The politeness of the ending.
 
         PLAIN shouldn't be used with い-adjectives, as they do not accept the plain
         copula.
@@ -60,18 +60,18 @@ class AdjectiveInflection:
 
     tense: Tense
     polarity: Polarity
-    copula_politeness: CopulaPoliteness | None
+    politeness: Politeness | None
 
     def __init__(
         self,
         *,
         tense: Tense = Tense.NONPAST,
         polarity: Polarity = Polarity.POSITIVE,
-        copula_politeness: CopulaPoliteness | None = None,
+        politeness: Politeness | None = None,
     ):
         self.tense = tense
         self.polarity = polarity
-        self.copula_politeness = copula_politeness
+        self.politeness = politeness
 
     def formatted(self):
         """Return each nondefault feature inside brackets, separated by spaces."""
@@ -80,8 +80,8 @@ class AdjectiveInflection:
             nondefault_features.append('[NEGATIVE]')
         if self.tense is AdjectiveInflection.Tense.PAST:
             nondefault_features.append('[PAST]')
-        if self.copula_politeness is AdjectiveInflection.CopulaPoliteness.POLITE:
-            nondefault_features.append('[POLITE COPULA]')
+        if self.politeness is AdjectiveInflection.Politeness.POLITE:
+            nondefault_features.append('[POLITE]')
         return ' '.join(nondefault_features)
 
     @staticmethod
@@ -91,20 +91,20 @@ class AdjectiveInflection:
         At least 1 of the features in the returned inflection has a nondefault value,
         or else there'd be no inflection at all.
 
-        い-adjectives never have AdjectiveCopulaPoliteness.PLAIN (it'll be None).
+        い-adjectives never have Politeness.PLAIN (it'll be None).
         """
         tense = random.choice(list(AdjectiveInflection.Tense))
         polarity = random.choice(list(AdjectiveInflection.Polarity))
-        valid_features = ['tense', 'polarity', 'copula_politeness']
+        valid_features = ['tense', 'polarity', 'politeness']
 
-        copula_politeness_choices = [AdjectiveInflection.CopulaPoliteness.POLITE]
+        politeness_choices = [AdjectiveInflection.Politeness.POLITE]
 
         accepts_plain_copula = adjective_type is AdjectiveType.NA
         if accepts_plain_copula:
-            copula_politeness_choices.append(
-                AdjectiveInflection.CopulaPoliteness.PLAIN
+            politeness_choices.append(
+                AdjectiveInflection.Politeness.PLAIN
             )
-        copula_politeness = random.choice(copula_politeness_choices)
+        politeness = random.choice(politeness_choices)
 
         required_nondefault_feature = random.choice(valid_features)
         # force at least one nondefault value
@@ -113,11 +113,11 @@ class AdjectiveInflection:
                 tense = AdjectiveInflection.Tense.PAST
             case 'polarity':
                 polarity = AdjectiveInflection.Polarity.NEGATIVE
-            case 'copula_politeness':
-                copula_politeness = AdjectiveInflection.CopulaPoliteness.POLITE
+            case 'politeness':
+                politeness = AdjectiveInflection.Politeness.POLITE
 
         return AdjectiveInflection(
-            tense=tense, polarity=polarity, copula_politeness=copula_politeness
+            tense=tense, polarity=polarity, politeness=politeness
         )
 
 

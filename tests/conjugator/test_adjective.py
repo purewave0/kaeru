@@ -61,7 +61,7 @@ def test_conjugate_i_adjective_polite_inflection():
         assert conjugator._conjugate_i_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE
+                politeness=AdjectiveInflection.Politeness.POLITE
             )
         ) == word['polite']
 
@@ -70,7 +70,7 @@ def test_conjugate_i_adjective_polite_negative_inflection():
         assert conjugator._conjugate_i_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 polarity=AdjectiveInflection.Polarity.NEGATIVE
             )
         ) == word['polite-negative']
@@ -80,7 +80,7 @@ def test_conjugate_i_adjective_polite_past_inflection():
         assert conjugator._conjugate_i_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 tense=AdjectiveInflection.Tense.PAST
             )
         ) == word['polite-past']
@@ -90,7 +90,7 @@ def test_conjugate_i_adjective_polite_past_negative_inflection():
         assert conjugator._conjugate_i_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 tense=AdjectiveInflection.Tense.PAST,
                 polarity=AdjectiveInflection.Polarity.NEGATIVE
             )
@@ -154,7 +154,7 @@ def test_conjugate_i_yoi_ii_adjective_polite_inflection():
         assert conjugator._conjugate_i_yoi_ii_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE
+                politeness=AdjectiveInflection.Politeness.POLITE
             )
         ) == word['polite']
 
@@ -163,7 +163,7 @@ def test_conjugate_i_yoi_ii_adjective_polite_negative_inflection():
         assert conjugator._conjugate_i_yoi_ii_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 polarity=AdjectiveInflection.Polarity.NEGATIVE
             )
         ) == word['polite-negative']
@@ -173,7 +173,7 @@ def test_conjugate_i_yoi_ii_adjective_polite_past_inflection():
         assert conjugator._conjugate_i_yoi_ii_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 tense=AdjectiveInflection.Tense.PAST
             )
         ) == word['polite-past']
@@ -183,7 +183,7 @@ def test_conjugate_i_yoi_ii_adjective_polite_past_negative_inflection():
         assert conjugator._conjugate_i_yoi_ii_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 tense=AdjectiveInflection.Tense.PAST,
                 polarity=AdjectiveInflection.Polarity.NEGATIVE
             )
@@ -249,7 +249,7 @@ def test_conjugate_na_adjective_polite_inflection():
         assert conjugator._conjugate_na_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE
+                politeness=AdjectiveInflection.Politeness.POLITE
             )
         ) == word['polite']
 
@@ -258,7 +258,7 @@ def test_conjugate_na_adjective_polite_negative_inflection():
         assert conjugator._conjugate_na_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 polarity=AdjectiveInflection.Polarity.NEGATIVE
             )
         ) == word['polite-negative']
@@ -268,7 +268,7 @@ def test_conjugate_na_adjective_polite_past_inflection():
         assert conjugator._conjugate_na_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 tense=AdjectiveInflection.Tense.PAST
             )
         ) == word['polite-past']
@@ -278,7 +278,7 @@ def test_conjugate_na_adjective_polite_negative_past_inflection():
         assert conjugator._conjugate_na_adjective(
             word['dictionary_form'],
             AdjectiveInflection(
-                copula_politeness=AdjectiveInflection.CopulaPoliteness.POLITE,
+                politeness=AdjectiveInflection.Politeness.POLITE,
                 tense=AdjectiveInflection.Tense.PAST,
                 polarity=AdjectiveInflection.Polarity.NEGATIVE
             )

@@ -15,18 +15,18 @@ def test_i_adjective_inflection_generate_random_generates_at_least_one_nondefaul
         are_all_values_default = (
             inflection.tense is AdjectiveInflection.Tense.NONPAST
             and inflection.polarity is AdjectiveInflection.Polarity.POSITIVE
-            and inflection.copula_politeness
-                is AdjectiveInflection.CopulaPoliteness.PLAIN
+            and inflection.politeness
+                is AdjectiveInflection.Politeness.PLAIN
         )
         assert not are_all_values_default
 
-def test_i_adjective_inflection_generate_random_copula_politeness_is_not_PLAIN():
+def test_i_adjective_inflection_generate_random_politeness_is_not_PLAIN():
     for _ in range(ITERATIONS):
         inflection = AdjectiveInflection.generate_random(AdjectiveType.I)
 
         assert (
-            inflection.copula_politeness
-            is not AdjectiveInflection.CopulaPoliteness.PLAIN
+            inflection.politeness
+            is not AdjectiveInflection.Politeness.PLAIN
         )
 
 
@@ -39,8 +39,8 @@ def test_na_adjective_inflection_generate_random_generates_at_least_one_nondefau
         are_all_values_default = (
             inflection.tense is AdjectiveInflection.Tense.NONPAST
             and inflection.polarity is AdjectiveInflection.Polarity.POSITIVE
-            and inflection.copula_politeness
-                is AdjectiveInflection.CopulaPoliteness.PLAIN
+            and inflection.politeness
+                is AdjectiveInflection.Politeness.PLAIN
         )
         assert not are_all_values_default
 
