@@ -96,6 +96,7 @@ class Kaeru(QtWidgets.QWidget):
                 verb_type,
                 random_inflection
             )
+            self.word_type.setText(verb_type.label)
             self.conjugation.setText(random_inflection.formatted())
         elif type_str.startswith('adjective'):
             try:
@@ -114,6 +115,7 @@ class Kaeru(QtWidgets.QWidget):
                 adjective_type,
                 random_inflection
             )
+            self.word_type.setText(adjective_type.label)
             self.conjugation.setText(random_inflection.formatted())
         else:
             print(

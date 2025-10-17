@@ -18,6 +18,21 @@ class AdjectiveType(Enum):
     NA = 'adjective-na'
     """な-adjective."""
 
+    @classmethod
+    def label_map(cls) -> dict['AdjectiveType', str]:
+        """Return a value->label mapping."""
+        return {
+            cls.I: 'い-adjective',
+            cls.I_YOI_II: 'い-adjective (良い/いい ending)',
+            cls.NA: 'な-adjective',
+        }
+
+    @property
+    def label(self) -> str:
+        """Return a user-friendly label for the AdjectiveType."""
+        return self.label_map()[self]
+
+
 class VerbType(Enum):
     """A type of verb that can be conjugated.
 
@@ -29,6 +44,20 @@ class VerbType(Enum):
     """う-verbs."""
     ICHIDAN_IRREGULAR = 'verb-ichidan-irregular'
     """する and 来る/くる, and any other verbs ending with those irregular forms."""
+
+    @classmethod
+    def label_map(cls) -> dict['VerbType', str]:
+        """Return a value->label mapping."""
+        return {
+            cls.ICHIDAN: '1-dan',
+            cls.GODAN: '5-dan',
+            cls.ICHIDAN_IRREGULAR: '1-dan (irregular する/来る ending)',
+        }
+
+    @property
+    def label(self) -> str:
+        """Return a user-friendly label for the VerbType."""
+        return self.label_map()[self]
 
 
 class AdjectiveInflection:

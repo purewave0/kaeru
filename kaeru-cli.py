@@ -38,7 +38,7 @@ def formatted_verb_question(
     """Return the given verb + inflection info as a question."""
     return (
         f'word: {verb}' + ('' if not kana_reading else f' ({kana_reading})')
-        + f'\ntype: {type.value}'
+        + f'\ntype: {type.label}'
         + f'\nconjugate to: {inflection.formatted()}'
     )
 
