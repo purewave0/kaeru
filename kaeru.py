@@ -85,7 +85,7 @@ class Kaeru(QtWidgets.QWidget):
         # layout
 
         self.answer.setMaximumWidth(600)
-        self.answer.setFont(medium_font)
+        self.answer.setTextMargins(8, 8, 8, 8)
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
