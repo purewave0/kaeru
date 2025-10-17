@@ -1,1 +1,2 @@
 japanese-verb-conjugator-v2 == 1.0.1
+pyside6 == 6.10.0

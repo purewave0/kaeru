@@ -1,0 +1,181 @@
+# pyright: reportAttributeAccessIssue=false
+# pyright doesn't work well with PySide6; lots of type errors even in code from the
+# documentation
+
+from collections.abc import Sequence
+import json
+import random
+import sys
+from typing import Any
+
+from PySide6 import QtCore, QtWidgets
+
+from inflection import (
+    AdjectiveType, AdjectiveInflection,
+    VerbType, VerbInflection
+)
+import conjugator
+
+
+class Kaeru(QtWidgets.QWidget):
+    word_to_conjugate: QtWidgets.QLabel
+    """Shows the word to be conjugated, in dictionary form."""
+    word_type: QtWidgets.QLabel
+    """Shows the type of word (see AdjectiveType, VerbType)."""
+    conjugation: QtWidgets.QLabel
+    """The conjugation being requested."""
+    answer: QtWidgets.QLineEdit
+    """The answer field."""
+    answer_button: QtWidgets.QPushButton
+    """The button to send the answer."""
+
+    correct_answer: str
+    """The correctly conjugated word."""
+
+    def __init__(self, words: Sequence[dict[str, Any]]):
+        super().__init__()
+
+        self.word_to_conjugate = QtWidgets.QLabel(
+            '…',
+            alignment=QtCore.Qt.AlignmentFlag.AlignCenter
+        )
+        self.word_type = QtWidgets.QLabel(
+            '…',
+            alignment=QtCore.Qt.AlignmentFlag.AlignCenter
+        )
+        self.conjugation = QtWidgets.QLabel(
+            '…',
+            alignment=QtCore.Qt.AlignmentFlag.AlignCenter
+        )
+        self.answer = QtWidgets.QLineEdit(
+            '',
+            placeholderText="Your answer"
+        )
+        self.answer_button = QtWidgets.QPushButton(
+            'Answer',
+            autoDefault=True,
+        )
+
+        self.answer_button.clicked.connect(self.process_answer)
+        self.answer.returnPressed.connect(self.answer_button.click)
+
+        self.words = words
+
+        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.addWidget(self.word_to_conjugate)
+        self.layout.addWidget(self.word_type)
+        self.layout.addWidget(self.conjugation)
+        self.layout.addWidget(self.answer)
+        self.layout.addWidget(self.answer_button)
+
+        self.ask_new_random_word()
+
+    def ask_new_random_word(self):
+        """Ask to conjugate a new random word."""
+        random_word = random.choice(self.words)
+        dictionary_form_word: str = random_word['word']
+
+        self.word_to_conjugate.setText(dictionary_form_word)
+        self.answer.setText('')
+
+        type_str = random_word['type']
+        if type_str.startswith('verb'):
+            try:
+                verb_type = VerbType(type_str)
+            except ValueError:
+                print(
+                    f'error: verb {dictionary_form_word} of illegal type'
+                    + f' "{type_str}"',
+                    file=sys.stderr
+                )
+                exit(4)
+            random_inflection = VerbInflection.generate_random()
+
+            self.correct_answer = conjugator.conjugate_verb(
+                dictionary_form_word,
+                verb_type,
+                random_inflection
+            )
+            self.conjugation.setText(random_inflection.formatted())
+        elif type_str.startswith('adjective'):
+            try:
+                adjective_type = AdjectiveType(type_str)
+            except ValueError:
+                print(
+                    f'error: adjective {dictionary_form_word} of illegal type'
+                    + f' "{type_str}"',
+                    file=sys.stderr
+                )
+                exit(4)
+            random_inflection = AdjectiveInflection.generate_random(adjective_type)
+
+            self.correct_answer = conjugator.conjugate_adjective(
+                dictionary_form_word,
+                adjective_type,
+                random_inflection
+            )
+            self.conjugation.setText(random_inflection.formatted())
+        else:
+            print(
+                f'error: word {dictionary_form_word} of illegal type'
+                + f' "{type_str}"',
+                file=sys.stderr
+            )
+            exit(4)
+
+    @QtCore.Slot()
+    def process_answer(self):
+        """If the answer is correct, ask a new one. Otherwise, show an error."""
+        is_correct = self.answer.text().strip() == self.correct_answer
+        if is_correct:
+            # TODO: proper notification
+            print('correct!')
+            self.ask_new_random_word()
+        else:
+            # TODO: proper notification
+            print('incorrect.')
+
+
+if __name__ == "__main__":
+    words: list[dict]
+    try:
+        with open('vocab.json') as vocab_file:
+            words = json.load(vocab_file)
+    except FileNotFoundError:
+        print(
+            'error: the vocab.json file does not exist. please run'
+            + ' `python3 make-vocab.py` to build it.',
+            file=sys.stderr
+        )
+        exit(1)
+    except OSError:
+        print(
+            'error: could not open vocab.json.',
+            file=sys.stderr
+        )
+        raise
+    except json.decoder.JSONDecodeError:
+        print(
+            'error: vocab.json is malformed. please rebuild it with'
+            + ' `python3 make-vocab.py`.',
+            file=sys.stderr
+        )
+        exit(2)
+
+    if not words:
+        print(
+            'error: vocab.json is malformed. please rebuild it with'
+            + ' `python3 make-vocab.py`.',
+            file=sys.stderr
+        )
+        exit(2)
+
+    print(f'{len(words)} words loaded.\n')
+
+    app = QtWidgets.QApplication([])
+
+    kaeru = Kaeru(words)
+    kaeru.resize(600, 450)
+    kaeru.show()
+
+    sys.exit(app.exec())
