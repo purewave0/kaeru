@@ -39,7 +39,8 @@ class Kaeru(QtWidgets.QWidget):
 
         self.word_to_conjugate = QtWidgets.QLabel(
             '…',
-            alignment=QtCore.Qt.AlignmentFlag.AlignCenter
+            alignment=QtCore.Qt.AlignmentFlag.AlignCenter,
+            textInteractionFlags=QtCore.Qt.TextInteractionFlag.TextSelectableByMouse
         )
         self.kana_reading = QtWidgets.QLabel(
             '…',
