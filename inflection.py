@@ -49,9 +49,9 @@ class VerbType(Enum):
     def label_map(cls) -> dict['VerbType', str]:
         """Return a value->label mapping."""
         return {
-            cls.ICHIDAN: '1-dan',
-            cls.GODAN: '5-dan',
-            cls.ICHIDAN_IRREGULAR: '1-dan (irregular する/来る ending)',
+            cls.ICHIDAN: '1-dan verb',
+            cls.GODAN: '5-dan verb',
+            cls.ICHIDAN_IRREGULAR: '1-dan verb (irregular する/来る ending)',
         }
 
     @property
