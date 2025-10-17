@@ -41,7 +41,7 @@ class Kaeru(QtWidgets.QWidget):
         )
         self.word_type = QtWidgets.QLabel(
             '…',
-            alignment=QtCore.Qt.AlignmentFlag.AlignCenter
+            alignment=QtCore.Qt.AlignmentFlag.AlignCenter,
         )
         self.conjugation = QtWidgets.QLabel(
             '…',
@@ -49,7 +49,7 @@ class Kaeru(QtWidgets.QWidget):
         )
         self.answer = QtWidgets.QLineEdit(
             '',
-            placeholderText="Your answer"
+            placeholderText="Your answer",
         )
         self.answer_button = QtWidgets.QPushButton(
             'Answer',
@@ -59,15 +59,35 @@ class Kaeru(QtWidgets.QWidget):
         self.answer_button.clicked.connect(self.process_answer)
         self.answer.returnPressed.connect(self.answer_button.click)
 
-        self.words = words
+        large_font = self.word_to_conjugate.font()
+        large_font.setPointSize(64)
+        self.word_to_conjugate.setFont(large_font)
+
+        medium_font = self.word_type.font()
+        medium_font.setPointSize(28)
+        self.word_type.setFont(medium_font)
+        self.conjugation.setFont(medium_font)
+        self.answer.setFont(medium_font)
+        self.answer_button.setFont(medium_font)
+
+        self.answer.setMaximumWidth(600)
+        self.answer.setFont(medium_font)
 
         self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.layout.setSpacing(24)
+
+        self.layout.addStretch()
         self.layout.addWidget(self.word_to_conjugate)
         self.layout.addWidget(self.word_type)
+        self.layout.addStretch()
         self.layout.addWidget(self.conjugation)
+        self.layout.addStretch()
         self.layout.addWidget(self.answer)
         self.layout.addWidget(self.answer_button)
+        self.layout.addStretch()
 
+        self.words = words
         self.ask_new_random_word()
 
     def ask_new_random_word(self):
@@ -177,7 +197,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
     kaeru = Kaeru(words)
-    kaeru.resize(600, 450)
+    kaeru.resize(800, 600)
     kaeru.show()
 
     sys.exit(app.exec())
