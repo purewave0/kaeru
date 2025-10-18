@@ -77,7 +77,7 @@ class Kaeru(QtWidgets.QWidget):
 
         self.word_to_conjugate.setFont(large_font)
         self.kana_reading.setFont(small_font)
-        self.word_type.setFont(medium_font)
+        self.word_type.setFont(small_font)
         self.conjugation.setFont(medium_font)
         self.answer.setFont(medium_font)
         self.answer_button.setFont(medium_font)
