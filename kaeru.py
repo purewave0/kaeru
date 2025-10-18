@@ -24,6 +24,7 @@ class Kaeru(QtWidgets.QWidget):
     """The kana reading, if needed, of the word to conjugate."""
     word_type: QtWidgets.QLabel
     """Shows the type of word (see AdjectiveType, VerbType)."""
+    conjugation_helper_text: QtWidgets.QLabel
     conjugation: QtWidgets.QLabel
     """The conjugation being requested."""
     answer: QtWidgets.QLineEdit
@@ -49,6 +50,10 @@ class Kaeru(QtWidgets.QWidget):
         self.word_type = QtWidgets.QLabel(
             '…',
             alignment=QtCore.Qt.AlignmentFlag.AlignCenter,
+        )
+        self.conjugation_helper_text = QtWidgets.QLabel(
+            'Conjugate to:',
+            alignment=QtCore.Qt.AlignmentFlag.AlignCenter
         )
         self.conjugation = QtWidgets.QLabel(
             '…',
@@ -78,6 +83,7 @@ class Kaeru(QtWidgets.QWidget):
         self.word_to_conjugate.setFont(large_font)
         self.kana_reading.setFont(small_font)
         self.word_type.setFont(small_font)
+        self.conjugation_helper_text.setFont(small_font)
         self.conjugation.setFont(medium_font)
         self.answer.setFont(medium_font)
         self.answer_button.setFont(medium_font)
@@ -96,8 +102,8 @@ class Kaeru(QtWidgets.QWidget):
         self.layout.addWidget(self.kana_reading)
         self.layout.addWidget(self.word_type)
         self.layout.addStretch()
+        self.layout.addWidget(self.conjugation_helper_text)
         self.layout.addWidget(self.conjugation)
-        self.layout.addStretch()
         self.layout.addWidget(self.answer)
         self.layout.addWidget(self.answer_button)
         self.layout.addStretch()
