@@ -22,6 +22,14 @@ import conjugator
 class Kaeru(QMainWindow):
     ui: Ui_MainWindow
     """Loaded from the compiled kaeru.ui."""
+    words: Sequence[dict[str, Any]]
+    """Words available for the quiz."""
+    correct_answer: str
+    """The correctly conjugated word."""
+    current_streak: int
+    """The number of words the user has conjugated correctly in a row."""
+    highest_streak: int
+    """The highest number of words the user has conjugated correctly in a row."""
 
     def __init__(self, words: Sequence[dict[str, Any]]):
         super().__init__()
@@ -31,6 +39,8 @@ class Kaeru(QMainWindow):
         self.ui.answer_button.clicked.connect(self.process_answer)
         self.ui.answer.returnPressed.connect(self.ui.answer_button.click)
 
+        self.current_streak = 0
+        self.highest_streak = 0  # TODO: load this from a db?
         self.words = words
         self.ask_new_random_word()
 
@@ -122,15 +132,30 @@ class Kaeru(QMainWindow):
 
     Slot()
     def process_answer(self):
-        """If the answer is correct, ask a new one. Otherwise, show an error."""
+        """If the answer is correct, ask a new one. Otherwise, show an error.
+
+        Update scores accordingly.
+        """
         is_correct = self.ui.answer.text().strip() == self.correct_answer
         if is_correct:
             # TODO: proper notification
             print('correct!')
+            self.current_streak += 1
             self.ask_new_random_word()
         else:
+            self.current_streak = 0
             # TODO: proper notification
             print('incorrect.')
+
+        beat_highest_streak = self.highest_streak < self.current_streak
+        if beat_highest_streak:
+            self.highest_streak = self.current_streak
+        self.update_scores()
+
+    def update_scores(self):
+        """Update the current streak and the highest streak values."""
+        self.ui.current_streak.setText(str(self.current_streak))
+        self.ui.highest_streak.setText(str(self.highest_streak))
 
 
 if __name__ == "__main__":
