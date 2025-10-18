@@ -111,6 +111,32 @@ class Kaeru(QtWidgets.QWidget):
         self.words = words
         self.ask_new_random_word()
 
+    def show_verb_inflection(self, inflection: VerbInflection):
+        """Show the nondefault features of the given verb inflection."""
+        nondefault_features = []
+        if inflection.base_form is VerbInflection.BaseForm.POLITE:
+            nondefault_features.append('POLITE')
+        elif inflection.base_form is VerbInflection.BaseForm.TE:
+            nondefault_features.append('て-FORM')
+
+        if inflection.tense is VerbInflection.Tense.PAST:
+            nondefault_features.append('PAST')
+        if inflection.polarity is VerbInflection.Polarity.NEGATIVE:
+            nondefault_features.append('NEGATIVE')
+        self.conjugation.setText(' '.join(nondefault_features))
+
+    def show_adjective_inflection(self, inflection: AdjectiveInflection):
+        """Show the nondefault features of the given adjective inflection."""
+        nondefault_features = []
+        nondefault_features = []
+        if inflection.polarity is AdjectiveInflection.Polarity.NEGATIVE:
+            nondefault_features.append('NEGATIVE')
+        if inflection.tense is AdjectiveInflection.Tense.PAST:
+            nondefault_features.append('PAST')
+        if inflection.politeness is AdjectiveInflection.Politeness.POLITE:
+            nondefault_features.append('POLITE')
+        self.conjugation.setText(' '.join(nondefault_features))
+
     def ask_new_random_word(self):
         """Ask to conjugate a new random word."""
         random_word = random.choice(self.words)
@@ -143,7 +169,7 @@ class Kaeru(QtWidgets.QWidget):
                 random_inflection
             )
             self.word_type.setText(verb_type.label)
-            self.conjugation.setText(random_inflection.formatted())
+            self.show_verb_inflection(random_inflection)
         elif type_str.startswith('adjective'):
             try:
                 adjective_type = AdjectiveType(type_str)
@@ -162,7 +188,7 @@ class Kaeru(QtWidgets.QWidget):
                 random_inflection
             )
             self.word_type.setText(adjective_type.label)
-            self.conjugation.setText(random_inflection.formatted())
+            self.show_adjective_inflection(random_inflection)
         else:
             print(
                 f'error: word {dictionary_form_word} of illegal type'
