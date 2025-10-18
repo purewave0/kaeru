@@ -8,7 +8,7 @@ import random
 import sys
 from typing import Any
 
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 
 from inflection import (
     AdjectiveType, AdjectiveInflection,
@@ -68,16 +68,15 @@ class Kaeru(QtWidgets.QWidget):
 
         # fonts
 
-        large_font = self.word_to_conjugate.font()
+        large_font = QtGui.QFont()
         large_font.setPointSize(64)
-        self.word_to_conjugate.setFont(large_font)
-
-        small_font = self.kana_reading.font()
-        small_font.setPointSize(14)
-        self.kana_reading.setFont(small_font)
-
-        medium_font = self.word_type.font()
+        medium_font = QtGui.QFont()
         medium_font.setPointSize(28)
+        small_font = QtGui.QFont()
+        small_font.setPointSize(14)
+
+        self.word_to_conjugate.setFont(large_font)
+        self.kana_reading.setFont(small_font)
         self.word_type.setFont(medium_font)
         self.conjugation.setFont(medium_font)
         self.answer.setFont(medium_font)
