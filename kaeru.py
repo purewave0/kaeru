@@ -163,7 +163,10 @@ class Kaeru(QMainWindow):
 
         Update scores accordingly.
         """
-        is_correct = self.ui.answer.text().strip() == self.correct_answer
+        answer = self.ui.answer.text().strip()
+        if not answer:
+            return
+        is_correct = answer == self.correct_answer
         if is_correct:
             # TODO: proper notification
             print('correct!')
