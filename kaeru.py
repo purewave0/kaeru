@@ -39,6 +39,14 @@ class Kaeru(QMainWindow):
         self.ui.answer_button.clicked.connect(self.process_answer)
         self.ui.answer.returnPressed.connect(self.ui.answer_button.click)
 
+        # TODO: load these preferences from a db
+        self.ui.option_show_kana_reading.toggled.connect(
+            self.toggle_showing_kana_reading
+        )
+        self.ui.option_show_word_type.toggled.connect(
+            self.toggle_showing_word_type
+        )
+
         self.current_streak = 0
         self.highest_streak = 0  # TODO: load this from a db?
         self.words = words
@@ -60,7 +68,6 @@ class Kaeru(QMainWindow):
 
     def show_adjective_inflection(self, inflection: AdjectiveInflection):
         """Show the nondefault features of the given adjective inflection."""
-        nondefault_features = []
         nondefault_features = []
         if inflection.polarity is AdjectiveInflection.Polarity.NEGATIVE:
             nondefault_features.append('NEGATIVE')
@@ -130,6 +137,11 @@ class Kaeru(QMainWindow):
             )
             exit(4)
 
+    def update_scores(self):
+        """Update the current streak and the highest streak values."""
+        self.ui.current_streak.setText(str(self.current_streak))
+        self.ui.highest_streak.setText(str(self.highest_streak))
+
     Slot()
     def process_answer(self):
         """If the answer is correct, ask a new one. Otherwise, show an error.
@@ -152,10 +164,21 @@ class Kaeru(QMainWindow):
             self.highest_streak = self.current_streak
         self.update_scores()
 
-    def update_scores(self):
-        """Update the current streak and the highest streak values."""
-        self.ui.current_streak.setText(str(self.current_streak))
-        self.ui.highest_streak.setText(str(self.highest_streak))
+    Slot()
+    def toggle_showing_kana_reading(self, checked: bool):
+        """Display the kana reading if this option is checked; hide it otherwise."""
+        if checked:
+            self.ui.kana_reading.show()
+        else:
+            self.ui.kana_reading.hide()
+
+    Slot()
+    def toggle_showing_word_type(self, checked: bool):
+        """Display the word type if this option is checked; hide it otherwise."""
+        if checked:
+            self.ui.word_type.show()
+        else:
+            self.ui.word_type.hide()
 
 
 if __name__ == "__main__":
