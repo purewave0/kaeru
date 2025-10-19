@@ -13,3 +13,6 @@ env/
 
 # the vocab JSON built by make-vocab.py
 vocab.json
+
+db.sqlite3
+*-journal
