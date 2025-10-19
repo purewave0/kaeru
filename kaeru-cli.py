@@ -1,5 +1,6 @@
 """Quiz adjective and verb conjugations on the command line."""
 
+from argparse import ArgumentParser
 import json
 import random
 import sys
@@ -18,13 +19,13 @@ from inflection import (
 def formatted_adjective_question(
     adjective: str,
     kana_reading: str | None,
-    type: AdjectiveType,
+    type: AdjectiveType | None,
     inflection: AdjectiveInflection
 ):
     """Return the given adjetcive + inflection info as a question."""
     return (
         f'word: {adjective}' + ('' if not kana_reading else f' ({kana_reading})')
-        + f'\ntype: {type.value}'
+        + (f'\ntype: {type.value}' if type else '\n')
         + f'\nconjugate to: {inflection.formatted()}'
     )
 
@@ -32,13 +33,13 @@ def formatted_adjective_question(
 def formatted_verb_question(
     verb: str,
     kana_reading: str | None,
-    type: VerbType,
+    type: VerbType | None,
     inflection: VerbInflection
 ):
     """Return the given verb + inflection info as a question."""
     return (
         f'word: {verb}' + ('' if not kana_reading else f' ({kana_reading})')
-        + f'\ntype: {type.label}'
+        + (f'\ntype: {type.label}' if type else '\n')
         + f'\nconjugate to: {inflection.formatted()}'
     )
 
@@ -46,6 +47,23 @@ def formatted_verb_question(
 ATTEMPT_INTERVAL_SECONDS = 1
 
 if __name__ == '__main__':
+    parser = ArgumentParser(
+        description='Practise Japanese verb & adjective inflections.'
+    )
+    parser.add_argument(
+        '-K',
+        '--hide-kana',
+        action='store_true',
+        help="don't display kana readings for words with kanji"
+    )
+    parser.add_argument(
+        '-T',
+        '--hide-word-type',
+        action='store_true',
+        help="""don't display the word type ("5-dan verb", "い-adjective", etc.)"""
+    )
+    args = parser.parse_args()
+
     words: list[dict]
     try:
         with open('vocab.json') as vocab_file:
@@ -105,7 +123,10 @@ if __name__ == '__main__':
                 dictionary_form_word, verb_type, random_inflection,
             )
             question = formatted_verb_question(
-                dictionary_form_word, kana_reading, verb_type, random_inflection,
+                dictionary_form_word,
+                kana_reading if not args.hide_kana else None,
+                verb_type if not args.hide_word_type else None,
+                random_inflection,
             )
         elif type_str.startswith('adjective'):
             try:
@@ -122,7 +143,10 @@ if __name__ == '__main__':
                 dictionary_form_word, adjective_type, random_inflection,
             )
             question = formatted_adjective_question(
-                dictionary_form_word, kana_reading, adjective_type, random_inflection,
+                dictionary_form_word,
+                kana_reading if not args.hide_kana else None,
+                adjective_type if not args.hide_word_type else None,
+                random_inflection,
             )
         else:
             print(
