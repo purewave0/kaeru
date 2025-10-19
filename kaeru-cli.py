@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 import json
 import random
+import sqlite3
 import sys
 from time import sleep
 import readline
@@ -14,6 +15,8 @@ from inflection import (
     AdjectiveType, AdjectiveInflection,
     VerbType, VerbInflection
 )
+import dbapi
+from constants import DATABASE_PATH
 
 
 def formatted_adjective_question(
@@ -21,7 +24,7 @@ def formatted_adjective_question(
     kana_reading: str | None,
     type: AdjectiveType | None,
     inflection: AdjectiveInflection
-):
+) -> str:
     """Return the given adjetcive + inflection info as a question."""
     return (
         f'word: {adjective}' + ('' if not kana_reading else f' ({kana_reading})')
@@ -35,12 +38,19 @@ def formatted_verb_question(
     kana_reading: str | None,
     type: VerbType | None,
     inflection: VerbInflection
-):
+) -> str:
     """Return the given verb + inflection info as a question."""
     return (
         f'word: {verb}' + ('' if not kana_reading else f' ({kana_reading})')
         + (f'\ntype: {type.label}' if type else '\n')
         + f'\nconjugate to: {inflection.formatted()}'
+    )
+
+
+def formatted_scores(current_streak: int, highest_streak: int) -> str:
+    return (
+        f'current streak: {current_streak}'
+        + f'\thighest streak: {highest_streak}'
     )
 
 
@@ -97,7 +107,14 @@ if __name__ == '__main__':
         )
         exit(2)
 
-    print(f'{len(words)} words loaded.\n')
+    print(f'{len(words)} words loaded.')
+
+    conn = sqlite3.connect(DATABASE_PATH)
+    dbapi.create_table_and_user_if_nexists(conn)
+
+    current_streak = 0
+    highest_streak = dbapi.get_highest_streak(conn)
+    print(formatted_scores(current_streak, highest_streak) + '\n')
 
     while True:
         random_word: dict = random.choice(words)
@@ -171,9 +188,17 @@ if __name__ == '__main__':
                 exit(0)
 
             if user_answer == correctly_conjugated_word:
-                print('correct! next one…\n')
+                current_streak += 1
+                beat_highest_streak = highest_streak < current_streak
+                if beat_highest_streak:
+                    highest_streak = current_streak
+                    dbapi.set_highest_streak(conn, highest_streak)
+
+                print(f'correct!\t{formatted_scores(current_streak, highest_streak)}')
+                print('next one…\n')
                 sleep(ATTEMPT_INTERVAL_SECONDS)
                 break
 
+            current_streak = 0
             print('wrong answer! try again.\n')
             sleep(ATTEMPT_INTERVAL_SECONDS)
