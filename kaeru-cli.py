@@ -54,7 +54,7 @@ def formatted_scores(current_streak: int, highest_streak: int) -> str:
     )
 
 
-ATTEMPT_INTERVAL_SECONDS = 1
+ATTEMPT_INTERVAL_SECONDS = 0.5
 
 if __name__ == '__main__':
     parser = ArgumentParser(
