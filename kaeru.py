@@ -7,6 +7,7 @@ import json
 import random
 import sys
 from typing import Any
+import sqlite3
 
 from PySide6.QtWidgets import QMainWindow, QApplication
 from PySide6.QtCore import Slot
@@ -17,6 +18,8 @@ from inflection import (
     VerbType, VerbInflection
 )
 import conjugator
+import dbapi
+from constants import DATABASE_PATH
 
 
 class Kaeru(QMainWindow):
@@ -30,6 +33,8 @@ class Kaeru(QMainWindow):
     """The number of words the user has conjugated correctly in a row."""
     highest_streak: int
     """The highest number of words the user has conjugated correctly in a row."""
+    conn: sqlite3.Connection
+    """The database connection."""
 
     def __init__(self, words: Sequence[dict[str, Any]]):
         super().__init__()
@@ -39,7 +44,9 @@ class Kaeru(QMainWindow):
         self.ui.answer_button.clicked.connect(self.process_answer)
         self.ui.answer.returnPressed.connect(self.ui.answer_button.click)
 
-        # TODO: load these preferences from a db
+        self.conn = sqlite3.connect(DATABASE_PATH)
+        dbapi.create_table_and_user_if_nexists(self.conn)
+
         self.ui.option_show_kana_reading.toggled.connect(
             self.toggle_showing_kana_reading
         )
@@ -47,8 +54,16 @@ class Kaeru(QMainWindow):
             self.toggle_showing_word_type
         )
 
+        self.ui.option_show_kana_reading.setChecked(
+            dbapi.get_show_kana_reading(self.conn)
+        )
+        self.ui.option_show_word_type.setChecked(
+            dbapi.get_show_word_type(self.conn)
+        )
+
         self.current_streak = 0
-        self.highest_streak = 0  # TODO: load this from a db?
+        self.highest_streak = dbapi.get_highest_streak(self.conn)
+        self.update_scores()
         self.words = words
         self.ask_new_random_word()
 
@@ -138,7 +153,7 @@ class Kaeru(QMainWindow):
             exit(4)
 
     def update_scores(self):
-        """Update the current streak and the highest streak values."""
+        """Update the current streak and the highest streak value labels."""
         self.ui.current_streak.setText(str(self.current_streak))
         self.ui.highest_streak.setText(str(self.highest_streak))
 
@@ -162,23 +177,30 @@ class Kaeru(QMainWindow):
         beat_highest_streak = self.highest_streak < self.current_streak
         if beat_highest_streak:
             self.highest_streak = self.current_streak
+            dbapi.set_highest_streak(self.conn, self.highest_streak)
         self.update_scores()
 
     Slot()
     def toggle_showing_kana_reading(self, checked: bool):
-        """Display the kana reading if this option is checked; hide it otherwise."""
+        """Display the kana reading if this option is checked, and store it in the
+        database.
+        """
         if checked:
             self.ui.kana_reading.show()
         else:
             self.ui.kana_reading.hide()
+        dbapi.set_show_kana_reading(self.conn, checked)
 
     Slot()
     def toggle_showing_word_type(self, checked: bool):
-        """Display the word type if this option is checked; hide it otherwise."""
+        """Display the word type if this option is checked, and store it in the
+        database.
+        """
         if checked:
             self.ui.word_type.show()
         else:
             self.ui.word_type.hide()
+        dbapi.set_show_word_type(self.conn, checked)
 
 
 if __name__ == "__main__":
