@@ -2,6 +2,7 @@
 # pyright doesn't work well with PySide6; lots of type errors even in code from the
 # documentation
 
+import argparse
 from collections.abc import Sequence
 import json
 import logging
@@ -260,32 +261,48 @@ class Kaeru(QMainWindow):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+
+    parser = argparse.ArgumentParser(
+        description='Practise Japanese verb & adjective inflections (GUI).',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        '-i',
+        '--vocab_file',
+        help='the JSON with verbs and adjectives for the quiz',
+        type=str,
+        default='vocab.json',
+    )
+    args = parser.parse_args()
+
     words: list[dict]
     try:
-        with open('vocab.json') as vocab_file:
+        with open(args.vocab_file) as vocab_file:
             words = json.load(vocab_file)
     except FileNotFoundError:
         logging.error(
-            'the vocab.json file does not exist. please run `python3 make-vocab.py`'
-            + ' to build it.'
+            f'"{args.vocab_file}" does not exist. run `python3 make-vocab.py`'
+            + ' to build a vocab file.'
         )
         exit(1)
     except OSError:
-        logging.error('could not open vocab.json.')
+        logging.error(f'could not open "{args.vocab_file}".')
         raise
     except json.decoder.JSONDecodeError:
         logging.error(
-            'vocab.json is malformed. please rebuild it with `python3 make-vocab.py`.'
+            f'{args.vocab_file} is malformed. run `python3 make-vocab.py`'
+            + ' to build a new vocab file.'
         )
         exit(2)
 
     if not words:
         logging.error(
-            'vocab.json is malformed. please rebuild it with `python3 make-vocab.py`.'
+            f'{args.vocab_file} is malformed. run `python3 make-vocab.py`'
+            + ' to build a new vocab file.'
         )
         exit(2)
 
-    logging.basicConfig(level=logging.INFO)
     logging.info(f'{len(words)} words loaded.')
 
     app = QApplication([])
