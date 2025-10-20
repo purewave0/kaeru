@@ -73,12 +73,11 @@ def get_jpdb_frequency_list_json() -> list[list]:
 # the type of words we want to keep based on JMdict's tags
 wanted_word_types = {
     # adjectives
-    'adj-i':   AdjectiveType.I,
-    'adj-ix':  AdjectiveType.I_YOI_II,
-    'adj-na':  AdjectiveType.NA,
+    'adj-i':  AdjectiveType.I,
+    'adj-ix': AdjectiveType.I_YOI_II,
+    'adj-na': AdjectiveType.NA,
     # verbs
     'v1':    VerbType.ICHIDAN,
-    # TODO: is 'v1-s' ('ichidan-kureru'), needed?
     'v5b':   VerbType.GODAN,
     'v5g':   VerbType.GODAN,
     'v5k':   VerbType.GODAN,
@@ -90,9 +89,6 @@ wanted_word_types = {
     'v5u':   VerbType.GODAN,
     'v5k-s': VerbType.GODAN,
     'v5r-i': VerbType.GODAN,  # treated as GODAN by japanese_verb_conjugator_v2
-    # TODO: are the following needed?
-    #'v5u-s': 'godan-u-ending-special',
-    #'v5aru': 'godan-aru',
 }
 
 
