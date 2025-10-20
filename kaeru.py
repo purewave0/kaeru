@@ -11,6 +11,7 @@ import sqlite3
 
 from PySide6.QtWidgets import QMainWindow, QApplication
 from PySide6.QtCore import Slot, QTimer
+from PySide6.QtGui import QScreen
 
 from ui.ui_kaeru import Ui_MainWindow
 from inflection import (
@@ -285,5 +286,10 @@ if __name__ == "__main__":
     kaeru = Kaeru(words)
     kaeru.resize(800, 600)
     kaeru.show()
+
+    center = QScreen.availableGeometry(QApplication.primaryScreen()).center()
+    geometry = kaeru.frameGeometry()
+    geometry.moveCenter(center)
+    kaeru.move(geometry.topLeft())
 
     sys.exit(app.exec())
