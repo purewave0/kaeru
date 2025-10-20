@@ -127,7 +127,7 @@ if __name__ == '__main__':
             print('cancelled.')
             exit(0)
 
-    logging.info(
+    print(
         f'building "{args.output}" with the {args.limit_per_type} most frequent verbs &'
         + f' adjectives (total {args.limit_per_type*2})\n'
     )
@@ -247,7 +247,6 @@ if __name__ == '__main__':
         } for adjective in jpdb_adjectives
     )
 
-    # TODO: sqlite db?
     try:
         with open(args.output, 'w') as output_file:
             json.dump(
