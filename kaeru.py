@@ -284,7 +284,7 @@ if __name__ == "__main__":
     app = QApplication([])
 
     kaeru = Kaeru(words)
-    kaeru.resize(800, 600)
+    kaeru.resize(800, 700)
     kaeru.show()
 
     center = QScreen.availableGeometry(QApplication.primaryScreen()).center()
