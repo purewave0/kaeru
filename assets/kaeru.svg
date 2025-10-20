@@ -1,0 +1,14 @@
+<svg width="512" height="512" viewBox="0 0 135.467 135.467" xmlns="http://www.w3.org/2000/svg">
+    <circle style="fill:#bc002d;fill-opacity:1;stroke-width:.198507" cx="67.733" cy="67.733" r="67.733"/>
+    <g transform="translate(0 -5.292)">
+        <path style="fill:#fff;stroke-width:.185;stroke-miterlimit:4;stroke-dasharray:none" d="M113.638 99.31c0 25.025-20.562 34.847-45.926 34.847-25.365 0-45.927-9.84-45.927-34.847C21.785 74.286 42.347 54 67.712 54c25.364 0 45.926 20.286 45.926 45.31z"/>
+        <ellipse style="fill:#fff;fill-opacity:1;stroke-width:.199" cx="46.567" cy="58.737" rx="15.342" ry="13.939"/>
+        <ellipse style="fill:#fff;fill-opacity:1;stroke-width:.199" cx="88.9" cy="58.737" rx="15.342" ry="13.939"/>
+        <circle style="fill:#bc002d;fill-opacity:1;stroke-width:.185032" cx="45.508" cy="57.15" r="7.408"/>
+        <circle style="fill:#bc002d;fill-opacity:1;stroke-width:.138774" cx="98.425" cy="81.492" r="5.556"/>
+        <circle style="fill:#bc002d;fill-opacity:1;stroke-width:.138774" cx="37.042" cy="81.492" r="5.556"/>
+        <circle style="fill:#bc002d;fill-opacity:1;stroke-width:.185032" cx="89.958" cy="57.15" r="7.408"/>
+        <path style="fill:none;fill-opacity:1;stroke:#bc002d;stroke-width:5.29167;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="M57.933 71.954c.099 4.161 4.457 7.495 9.8 7.497 5.344-.002 9.702-3.336 9.8-7.497"/>
+        <path style="fill:#bc002d;stroke:#bc002d;stroke-width:.194388;stroke-linecap:round" d="M100.267 120.102c0 12.936-14.105 14.906-32.09 14.906-17.985 0-33.04-1.97-33.04-14.906 0-12.935 14.58-23.422 32.565-23.422s32.565 10.487 32.565 23.422z"/>
+    </g>
+</svg>
