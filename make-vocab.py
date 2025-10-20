@@ -22,6 +22,7 @@ For example:
 ]
 """
 
+import argparse
 import json
 import sys
 import urllib.request
@@ -95,30 +96,20 @@ wanted_word_types = {
 
 
 if __name__ == '__main__':
-    type_frequency_limit = 100
-    """The amount of verbs and adjectives to fetch; 100 by default."""
+    logging.basicConfig(level=logging.INFO)
 
-    example = (
-        '\n\nfor example, to fetch 200 verbs and 200 adjectives (400 in total), run:'
-        + '\npython3 make-vocab.py 200'
+    parser = argparse.ArgumentParser(
+        description='Prepare the vocabulary JSON used by kaeru.',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-
-    if len(sys.argv) != 1:
-        try:
-            type_frequency_limit = int(sys.argv[1])
-        except (TypeError, ValueError):
-            logging.error(
-                'the amount to fetch must be an integer.'
-                + example
-            )
-            exit(1)
-
-        if type_frequency_limit < 1:
-            logging.error(
-                'the amount to fetch must be greater than 0.'
-                + example
-            )
-            exit(2)
+    parser.add_argument(
+        'limit_per_type',
+        help='the maximum amount of verbs and adjectives to fetch',
+        type=int,
+        nargs='?',
+        default=100,
+    )
+    args = parser.parse_args()
 
     # TODO: make output name/path configurable
     if path.isfile('vocab.json'):
@@ -130,9 +121,9 @@ if __name__ == '__main__':
             print('cancelled.')
             exit(0)
 
-    print(
-        f'building a vocab.json with the {type_frequency_limit} most frequent verbs &'
-        + f' adjectives (total {type_frequency_limit*2})\n'
+    logging.info(
+        f'building a vocab.json with the {args.limit_per_type} most frequent verbs &'
+        + f' adjectives (total {args.limit_per_type*2})\n'
     )
 
     print(
@@ -222,7 +213,7 @@ if __name__ == '__main__':
             # this isn't the right type of word; discard it
             del jpdb_words[word]
 
-    # finally, we limit both verbs and adjectives to `type_frequency_limit` items
+    # finally, we limit both verbs and adjectives to `args.limit_per_type` items
 
     def sort_by_frequency(word_list: list[dict[str, str]]) -> None:
         """Sort the given word list by frequency in ascending order."""
@@ -230,7 +221,7 @@ if __name__ == '__main__':
 
     print('[4/4] sorting and trimming the final output…')
     sort_by_frequency(jpdb_verbs)
-    jpdb_verbs = jpdb_verbs[:type_frequency_limit]
+    jpdb_verbs = jpdb_verbs[:args.limit_per_type]
     # we don't need the 'frequency' field anymore
     jpdb_verbs = tuple(
         {
@@ -241,7 +232,7 @@ if __name__ == '__main__':
     )
 
     sort_by_frequency(jpdb_adjectives)
-    jpdb_adjectives = jpdb_adjectives[:type_frequency_limit]
+    jpdb_adjectives = jpdb_adjectives[:args.limit_per_type]
     jpdb_adjectives = tuple(
         {
             'word': adjective['word'],
