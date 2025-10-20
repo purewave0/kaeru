@@ -4,6 +4,7 @@
 
 from collections.abc import Sequence
 import json
+import logging
 import random
 import sys
 from typing import Any
@@ -121,10 +122,8 @@ class Kaeru(QMainWindow):
             try:
                 verb_type = VerbType(type_str)
             except ValueError:
-                print(
-                    f'error: verb {dictionary_form_word} of illegal type'
-                    + f' "{type_str}"',
-                    file=sys.stderr
+                logging.error(
+                    f'verb {dictionary_form_word} of illegal type "{type_str}"'
                 )
                 exit(4)
             random_inflection = VerbInflection.generate_random()
@@ -140,10 +139,8 @@ class Kaeru(QMainWindow):
             try:
                 adjective_type = AdjectiveType(type_str)
             except ValueError:
-                print(
-                    f'error: adjective {dictionary_form_word} of illegal type'
-                    + f' "{type_str}"',
-                    file=sys.stderr
+                logging.error(
+                    f'adjective {dictionary_form_word} of illegal type "{type_str}"'
                 )
                 exit(4)
             random_inflection = AdjectiveInflection.generate_random(adjective_type)
@@ -156,10 +153,8 @@ class Kaeru(QMainWindow):
             self.ui.word_type.setText(adjective_type.label)
             self.show_adjective_inflection(random_inflection)
         else:
-            print(
-                f'error: word {dictionary_form_word} of illegal type'
-                + f' "{type_str}"',
-                file=sys.stderr
+            logging.error(
+                f'word {dictionary_form_word} of illegal type "{type_str}".'
             )
             exit(4)
 
@@ -251,35 +246,28 @@ if __name__ == "__main__":
         with open('vocab.json') as vocab_file:
             words = json.load(vocab_file)
     except FileNotFoundError:
-        print(
-            'error: the vocab.json file does not exist. please run'
-            + ' `python3 make-vocab.py` to build it.',
-            file=sys.stderr
+        logging.error(
+            'the vocab.json file does not exist. please run `python3 make-vocab.py`'
+            + ' to build it.'
         )
         exit(1)
     except OSError:
-        print(
-            'error: could not open vocab.json.',
-            file=sys.stderr
-        )
+        logging.error('could not open vocab.json.')
         raise
     except json.decoder.JSONDecodeError:
-        print(
-            'error: vocab.json is malformed. please rebuild it with'
-            + ' `python3 make-vocab.py`.',
-            file=sys.stderr
+        logging.error(
+            'vocab.json is malformed. please rebuild it with `python3 make-vocab.py`.'
         )
         exit(2)
 
     if not words:
-        print(
-            'error: vocab.json is malformed. please rebuild it with'
-            + ' `python3 make-vocab.py`.',
-            file=sys.stderr
+        logging.error(
+            'vocab.json is malformed. please rebuild it with `python3 make-vocab.py`.'
         )
         exit(2)
 
-    print(f'{len(words)} words loaded.\n')
+    logging.basicConfig(level=logging.INFO)
+    logging.info(f'{len(words)} words loaded.')
 
     app = QApplication([])
 
