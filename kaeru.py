@@ -37,11 +37,19 @@ class Kaeru(QMainWindow):
     """The database connection."""
 
     SCORE_COLOUR_FLASH_DURATION = 700
+    """For how many milliseconds the score colour changes to indicate a score change."""
+    FEEDBACK_DURATION = 2_000
+    """For how many milliseconds the feedback is displayed."""
 
     def __init__(self, words: Sequence[dict[str, Any]]):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        feedback_size_policy = self.ui.feedback.sizePolicy()
+        feedback_size_policy.setRetainSizeWhenHidden(True)
+        self.ui.feedback.setSizePolicy(feedback_size_policy)
+        self.ui.feedback.hide()
 
         self.ui.answer_button.clicked.connect(self.process_answer)
         self.ui.answer.returnPressed.connect(self.ui.answer_button.click)
@@ -155,25 +163,34 @@ class Kaeru(QMainWindow):
             exit(4)
 
     def notify_answer_was_correct(self):
-        """Flash the current streak label green to indicate the answer was correct."""
+        """Flash the current streak's value green to indicate the answer was correct."""
+        self.ui.feedback.hide()
         self.ui.current_streak.setStyleSheet('color: #7ddf64;')
         QTimer.singleShot(
             Kaeru.SCORE_COLOUR_FLASH_DURATION,
-            self.reset_answer_notification
+            self.reset_score_colour_change
         )
 
     def notify_answer_was_incorrect(self):
-        """Flash the current streak label red to indicate the answer was incorrect."""
+        """Temporarily flash the current streak's value red and show error feedback."""
         self.ui.current_streak.setStyleSheet('color: #ff4b3e')
         QTimer.singleShot(
-            Kaeru.SCORE_COLOUR_FLASH_DURATION,
-            self.reset_answer_notification
+            Kaeru.SCORE_COLOUR_FLASH_DURATION, self.reset_score_colour_change
+        )
+        self.ui.feedback.show()
+        QTimer.singleShot(
+            Kaeru.FEEDBACK_DURATION, self.hide_feedback
         )
 
     @Slot()
-    def reset_answer_notification(self):
-        """Reset the current streak's value colour to its original value."""
+    def reset_score_colour_change(self):
+        """Reset the current streak's value colour."""
         self.ui.current_streak.setStyleSheet('')
+
+    @Slot()
+    def hide_feedback(self):
+        """Hide the error feedback."""
+        self.ui.feedback.hide()
 
     def update_scores(self):
         """Update the current streak and the highest streak value labels."""
@@ -182,7 +199,7 @@ class Kaeru(QMainWindow):
 
     Slot()
     def process_answer(self):
-        """If the answer is correct, ask a new one. Otherwise, show an error.
+        """If the answer is correct, ask a new one. Otherwise, show error feedback.
 
         Update scores accordingly.
         """

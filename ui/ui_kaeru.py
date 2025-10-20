@@ -133,6 +133,21 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
+        self.feedback = QLabel(self.centralwidget)
+        self.feedback.setObjectName(u"feedback")
+        self.feedback.setEnabled(True)
+        font4 = QFont()
+        font4.setPointSize(12)
+        self.feedback.setFont(font4)
+        self.feedback.setStyleSheet(u"color: #ff4b3e")
+        self.feedback.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout_2.addWidget(self.feedback)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 24, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer_2)
+
         self.score_section = QHBoxLayout()
         self.score_section.setObjectName(u"score_section")
         self.score_section.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
@@ -145,10 +160,10 @@ class Ui_MainWindow(object):
 
         self.current_streak_helper_text = QLabel(self.centralwidget)
         self.current_streak_helper_text.setObjectName(u"current_streak_helper_text")
-        font4 = QFont()
-        font4.setPointSize(16)
-        font4.setBold(False)
-        self.current_streak_helper_text.setFont(font4)
+        font5 = QFont()
+        font5.setPointSize(16)
+        font5.setBold(False)
+        self.current_streak_helper_text.setFont(font5)
 
         self.current_streak_layout.addWidget(self.current_streak_helper_text)
 
@@ -170,7 +185,7 @@ class Ui_MainWindow(object):
         self.highest_streak_layout.setObjectName(u"highest_streak_layout")
         self.highest_streak_helper_text = QLabel(self.centralwidget)
         self.highest_streak_helper_text.setObjectName(u"highest_streak_helper_text")
-        self.highest_streak_helper_text.setFont(font4)
+        self.highest_streak_helper_text.setFont(font5)
 
         self.highest_streak_layout.addWidget(self.highest_streak_helper_text)
 
@@ -227,9 +242,20 @@ class Ui_MainWindow(object):
         self.conjugation.setText(QCoreApplication.translate("MainWindow", u"POLITE", None))
         self.answer.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Your answer", None))
         self.answer_button.setText(QCoreApplication.translate("MainWindow", u"Answer", None))
+#if QT_CONFIG(tooltip)
+        self.feedback.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(statustip)
+        self.feedback.setStatusTip("")
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.feedback.setWhatsThis("")
+#endif // QT_CONFIG(whatsthis)
+        self.feedback.setText(QCoreApplication.translate("MainWindow", u"Incorrect answer; try again.", None))
         self.current_streak_helper_text.setText(QCoreApplication.translate("MainWindow", u"Current Streak:", None))
         self.current_streak.setText(QCoreApplication.translate("MainWindow", u"0", None))
         self.highest_streak_helper_text.setText(QCoreApplication.translate("MainWindow", u"Highest Streak:", None))
         self.highest_streak.setText(QCoreApplication.translate("MainWindow", u"0", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
     # retranslateUi
+
