@@ -264,7 +264,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     parser = argparse.ArgumentParser(
-        description='Practise Japanese verb & adjective inflections (GUI).',
+        description='Japanese verb & adjective conjugation trainer (GUI).',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(

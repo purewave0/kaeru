@@ -1,2 +1,3 @@
 # kaeru
-Practise Japanese verb &amp; adjective inflections
+
+Japanese verb & adjective conjugation trainer
