@@ -109,12 +109,18 @@ if __name__ == '__main__':
         type=int,
         default=100,
     )
+    parser.add_argument(
+        '-o',
+        '--output',
+        help='where to save the final JSON',
+        type=str,
+        default='vocab.json',
+    )
     args = parser.parse_args()
 
-    # TODO: make output name/path configurable
-    if path.isfile('vocab.json'):
+    if path.isfile(args.output):
         answer = input(
-            'warning: a vocab.json file already exists. do you want to overwrite it?'
+            f'warning: "{args.output}" already exists. do you want to overwrite it?'
             + ' (y/N): '
         )
         if answer.strip().lower() not in ('y', 'yes'):
@@ -122,7 +128,7 @@ if __name__ == '__main__':
             exit(0)
 
     logging.info(
-        f'building a vocab.json with the {args.limit_per_type} most frequent verbs &'
+        f'building "{args.output}" with the {args.limit_per_type} most frequent verbs &'
         + f' adjectives (total {args.limit_per_type*2})\n'
     )
 
@@ -243,7 +249,7 @@ if __name__ == '__main__':
 
     # TODO: sqlite db?
     try:
-        with open('vocab.json', 'w') as output_file:
+        with open(args.output, 'w') as output_file:
             json.dump(
                 (*jpdb_verbs, *jpdb_adjectives),
                 output_file,
@@ -251,7 +257,7 @@ if __name__ == '__main__':
                 indent=0,
             )
     except OSError:
-        logging.error('could not write the result to vocab.json.')
+        logging.error(f'could not write the result to "{args.output}".')
         raise
 
     print('done.')
