@@ -123,8 +123,8 @@ if __name__ == '__main__':
     # TODO: make output name/path configurable
     if path.isfile('vocab.json'):
         answer = input(
-            'warning: a vocab.json file already exists. are you sure you want to'
-            + ' overwrite it? (y/N): '
+            'warning: a vocab.json file already exists. do you want to overwrite it?'
+            + ' (y/N): '
         )
         if answer.strip().lower() not in ('y', 'yes'):
             print('cancelled.')
