@@ -341,7 +341,11 @@
    </widget>
    <addaction name="menuView"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
   <action name="option_show_kana_reading">
    <property name="checkable">
     <bool>true</bool>
