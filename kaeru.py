@@ -98,7 +98,7 @@ class Kaeru(QMainWindow):
         dialog = AboutKaeru()
         dialog.exec()
 
-    def show_verb_inflection(self, inflection: VerbInflection):
+    def show_verb_inflection(self, inflection: VerbInflection) -> None:
         """Show the nondefault features of the given verb inflection."""
         nondefault_features = []
         if inflection.base_form is VerbInflection.BaseForm.POLITE:
@@ -112,7 +112,7 @@ class Kaeru(QMainWindow):
             nondefault_features.append('NEGATIVE')
         self.ui.conjugation.setText(' '.join(nondefault_features))
 
-    def show_adjective_inflection(self, inflection: AdjectiveInflection):
+    def show_adjective_inflection(self, inflection: AdjectiveInflection) -> None:
         """Show the nondefault features of the given adjective inflection."""
         nondefault_features = []
         if inflection.polarity is AdjectiveInflection.Polarity.NEGATIVE:
@@ -123,7 +123,7 @@ class Kaeru(QMainWindow):
             nondefault_features.append('POLITE')
         self.ui.conjugation.setText(' '.join(nondefault_features))
 
-    def ask_new_random_word(self):
+    def ask_new_random_word(self) -> None:
         """Ask to conjugate a new random word."""
         random_word = random.choice(self.words)
         dictionary_form_word: str = random_word['word']
@@ -177,7 +177,7 @@ class Kaeru(QMainWindow):
             )
             exit(4)
 
-    def notify_answer_was_correct(self):
+    def notify_answer_was_correct(self) -> None:
         """Flash the current streak's value green to indicate the answer was correct."""
         self.ui.feedback.hide()
         self.ui.current_streak.setStyleSheet('color: #7ddf64;')
@@ -186,7 +186,7 @@ class Kaeru(QMainWindow):
             self.reset_score_colour_change
         )
 
-    def notify_answer_was_incorrect(self):
+    def notify_answer_was_incorrect(self) -> None:
         """Temporarily flash the current streak's value red and show error feedback."""
         self.ui.current_streak.setStyleSheet('color: #ff4b3e')
         QTimer.singleShot(
@@ -198,22 +198,22 @@ class Kaeru(QMainWindow):
         )
 
     @Slot()
-    def reset_score_colour_change(self):
+    def reset_score_colour_change(self) -> None:
         """Reset the current streak's value colour."""
         self.ui.current_streak.setStyleSheet('')
 
     @Slot()
-    def hide_feedback(self):
+    def hide_feedback(self) -> None:
         """Hide the error feedback."""
         self.ui.feedback.hide()
 
-    def update_scores(self):
+    def update_scores(self) -> None:
         """Update the current streak and the highest streak value labels."""
         self.ui.current_streak.setText(str(self.current_streak))
         self.ui.highest_streak.setText(str(self.highest_streak))
 
     Slot()
-    def process_answer(self):
+    def process_answer(self) -> None:
         """If the answer is correct, ask a new one. Otherwise, show error feedback.
 
         Update scores accordingly.
@@ -237,7 +237,7 @@ class Kaeru(QMainWindow):
         self.update_scores()
 
     Slot()
-    def toggle_showing_kana_reading(self, checked: bool):
+    def toggle_showing_kana_reading(self, checked: bool) -> None:
         """Display the kana reading if this option is checked, and store it in the
         database.
         """
@@ -248,7 +248,7 @@ class Kaeru(QMainWindow):
         dbapi.set_show_kana_reading(self.conn, checked)
 
     Slot()
-    def toggle_showing_word_type(self, checked: bool):
+    def toggle_showing_word_type(self, checked: bool) -> None:
         """Display the word type if this option is checked, and store it in the
         database.
         """
