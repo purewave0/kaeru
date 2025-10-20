@@ -10,11 +10,12 @@ import sys
 from typing import Any
 import sqlite3
 
-from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6.QtWidgets import QDialog, QMainWindow, QApplication
 from PySide6.QtCore import Slot, QTimer
 from PySide6.QtGui import QScreen
 
 from ui.ui_kaeru import Ui_MainWindow
+from ui.ui_about import Ui_Dialog
 from inflection import (
     AdjectiveType, AdjectiveInflection,
     VerbType, VerbInflection
@@ -22,6 +23,17 @@ from inflection import (
 import conjugator
 import dbapi
 from constants import DATABASE_PATH
+
+
+class AboutKaeru(QDialog):
+    """About dialog."""
+    ui: Ui_Dialog
+    """Loaded from the compiled about.ui."""
+
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
 
 
 class Kaeru(QMainWindow):
@@ -65,6 +77,7 @@ class Kaeru(QMainWindow):
         self.ui.option_show_word_type.toggled.connect(
             self.toggle_showing_word_type
         )
+        self.ui.action_about.triggered.connect(self.show_about_dialog)
 
         self.ui.option_show_kana_reading.setChecked(
             dbapi.get_show_kana_reading(self.conn)
@@ -78,6 +91,12 @@ class Kaeru(QMainWindow):
         self.update_scores()
         self.words = words
         self.ask_new_random_word()
+
+    @Slot()
+    def show_about_dialog(self) -> None:
+        """Show the About dialog."""
+        dialog = AboutKaeru()
+        dialog.exec()
 
     def show_verb_inflection(self, inflection: VerbInflection):
         """Show the nondefault features of the given verb inflection."""
