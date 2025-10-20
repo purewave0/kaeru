@@ -51,6 +51,9 @@ class Ui_MainWindow(object):
         self.option_show_word_type.setObjectName(u"option_show_word_type")
         self.option_show_word_type.setCheckable(True)
         self.option_show_word_type.setChecked(True)
+        self.action_about = QAction(MainWindow)
+        self.action_about.setObjectName(u"action_about")
+        self.action_about.setMenuRole(QAction.MenuRole.AboutRole)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
@@ -216,6 +219,9 @@ class Ui_MainWindow(object):
         self.menubar.setNativeMenuBar(True)
         self.menuView = QMenu(self.menubar)
         self.menuView.setObjectName(u"menuView")
+        self.menuHelp = QMenu(self.menubar)
+        self.menuHelp.setObjectName(u"menuHelp")
+        self.menuHelp.setSeparatorsCollapsible(False)
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -223,8 +229,10 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuView.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
         self.menuView.addAction(self.option_show_kana_reading)
         self.menuView.addAction(self.option_show_word_type)
+        self.menuHelp.addAction(self.action_about)
 
         self.retranslateUi(MainWindow)
 
@@ -238,6 +246,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"kaeru", None))
         self.option_show_kana_reading.setText(QCoreApplication.translate("MainWindow", u"Kana reading", None))
         self.option_show_word_type.setText(QCoreApplication.translate("MainWindow", u"Word type", None))
+        self.action_about.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.word_to_conjugate.setText(QCoreApplication.translate("MainWindow", u"\u9ad8\u3044", None))
         self.kana_reading.setText(QCoreApplication.translate("MainWindow", u"\uff08\u305f\u304b\u3044\uff09", None))
         self.word_type.setText(QCoreApplication.translate("MainWindow", u"\u3044-adjective", None))
@@ -260,5 +269,6 @@ class Ui_MainWindow(object):
         self.highest_streak_helper_text.setText(QCoreApplication.translate("MainWindow", u"Highest Streak:", None))
         self.highest_streak.setText(QCoreApplication.translate("MainWindow", u"0", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
+        self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi
 
