@@ -155,6 +155,7 @@ class Ui_MainWindow(object):
         self.current_streak = QLabel(self.centralwidget)
         self.current_streak.setObjectName(u"current_streak")
         self.current_streak.setMinimumSize(QSize(32, 0))
+        self.current_streak.setFont(font)
 
         self.current_streak_layout.addWidget(self.current_streak)
 
@@ -231,4 +232,3 @@ class Ui_MainWindow(object):
         self.highest_streak.setText(QCoreApplication.translate("MainWindow", u"0", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
     # retranslateUi
-

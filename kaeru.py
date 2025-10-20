@@ -10,7 +10,7 @@ from typing import Any
 import sqlite3
 
 from PySide6.QtWidgets import QMainWindow, QApplication
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, QTimer
 
 from ui.ui_kaeru import Ui_MainWindow
 from inflection import (
@@ -35,6 +35,8 @@ class Kaeru(QMainWindow):
     """The highest number of words the user has conjugated correctly in a row."""
     conn: sqlite3.Connection
     """The database connection."""
+
+    SCORE_COLOUR_FLASH_DURATION = 700
 
     def __init__(self, words: Sequence[dict[str, Any]]):
         super().__init__()
@@ -152,6 +154,27 @@ class Kaeru(QMainWindow):
             )
             exit(4)
 
+    def notify_answer_was_correct(self):
+        """Flash the current streak label green to indicate the answer was correct."""
+        self.ui.current_streak.setStyleSheet('color: #7ddf64;')
+        QTimer.singleShot(
+            Kaeru.SCORE_COLOUR_FLASH_DURATION,
+            self.reset_answer_notification
+        )
+
+    def notify_answer_was_incorrect(self):
+        """Flash the current streak label red to indicate the answer was incorrect."""
+        self.ui.current_streak.setStyleSheet('color: #ff4b3e')
+        QTimer.singleShot(
+            Kaeru.SCORE_COLOUR_FLASH_DURATION,
+            self.reset_answer_notification
+        )
+
+    @Slot()
+    def reset_answer_notification(self):
+        """Reset the current streak's value colour to its original value."""
+        self.ui.current_streak.setStyleSheet('')
+
     def update_scores(self):
         """Update the current streak and the highest streak value labels."""
         self.ui.current_streak.setText(str(self.current_streak))
@@ -168,14 +191,12 @@ class Kaeru(QMainWindow):
             return
         is_correct = answer == self.correct_answer
         if is_correct:
-            # TODO: proper notification
-            print('correct!')
             self.current_streak += 1
+            self.notify_answer_was_correct()
             self.ask_new_random_word()
         else:
             self.current_streak = 0
-            # TODO: proper notification
-            print('incorrect.')
+            self.notify_answer_was_incorrect()
 
         beat_highest_streak = self.highest_streak < self.current_streak
         if beat_highest_streak:
