@@ -103,10 +103,10 @@ if __name__ == '__main__':
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
-        'limit_per_type',
-        help='the maximum amount of verbs and adjectives to fetch',
+        '-n',
+        '--limit_per_type',
+        help='the maximum number of verbs and adjectives to fetch',
         type=int,
-        nargs='?',
         default=100,
     )
     args = parser.parse_args()
