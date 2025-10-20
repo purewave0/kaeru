@@ -24,6 +24,7 @@ For example:
 
 import argparse
 import json
+from multiprocessing import Pool
 import sys
 import urllib.request
 import shutil
@@ -133,14 +134,27 @@ if __name__ == '__main__':
     )
 
     print(
-        '[1/4] fetching the JPDB frequency list'
+        '[1/3] fetching the JPDB frequency list'
         + ' @ https://github.com/Kuuuube/yomitan-dictionaries…'
+        '\n      fetching the Simplified JMdict'
+        + '   @ https://github.com/scriptin/jmdict-simplified…'
     )
-    try:
-        frequency_json = get_jpdb_frequency_list_json()
-    except Exception:
-        logging.error('could not fetch the JPDB frequency list.')
-        raise
+
+    with Pool(processes=2) as pool:
+        jpdb_process = pool.apply_async(get_jpdb_frequency_list_json)
+        jmdict_process = pool.apply_async(get_simplified_jmdict_json)
+
+        try:
+            frequency_json = jpdb_process.get()
+        except Exception:
+            logging.error('could not fetch the JPDB frequency list.')
+            raise
+
+        try:
+            jmdict_json = jmdict_process.get()
+        except Exception:
+            logging.error('could not fetch the Simplified JMdict.')
+            raise
 
     # first, we load the words from the JPDB frequency list json
     jpdb_words = {}
@@ -160,23 +174,13 @@ if __name__ == '__main__':
     # the whole json is a bit heavy. we don't need it anymore
     del frequency_json
 
-    print(
-        '[2/4] fetching the Simplified JMdict'
-        + ' @ https://github.com/scriptin/jmdict-simplified…'
-    )
-    try:
-        jmdict_json = get_simplified_jmdict_json()
-    except Exception:
-        logging.error('could not fetch the Simplified JMdict.')
-        raise
-
     # now we separate them into verbs and adjectives, also filling the type, kana, and
     # frequency data
 
     jpdb_verbs = []
     jpdb_adjectives = []
 
-    print('[3/4] merging word + frequency data…')
+    print('[2/3] merging word + frequency data…')
     for entry in jmdict_json:
         # an entry might have multiple kanji & kana spellings. we'll stick with non-rare
         # ones only and treat them as distinct words (so we can analyse each spelling's
@@ -225,7 +229,7 @@ if __name__ == '__main__':
         """Sort the given word list by frequency in ascending order."""
         word_list.sort(key=lambda x: x['frequency'])
 
-    print('[4/4] sorting and trimming the final output…')
+    print('[3/3] sorting and trimming the final output…')
     sort_by_frequency(jpdb_verbs)
     jpdb_verbs = jpdb_verbs[:args.limit_per_type]
     # we don't need the 'frequency' field anymore
