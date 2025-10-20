@@ -1,6 +1,6 @@
 """Quiz adjective and verb conjugations on the command line."""
 
-from argparse import ArgumentParser
+import argparse
 import json
 import random
 import sqlite3
@@ -58,8 +58,18 @@ def formatted_scores(current_streak: int, highest_streak: int) -> str:
 ATTEMPT_INTERVAL_SECONDS = 0.5
 
 if __name__ == '__main__':
-    parser = ArgumentParser(
-        description='Practise Japanese verb & adjective inflections.'
+    logging.basicConfig(level=logging.INFO)
+
+    parser = argparse.ArgumentParser(
+        description='Practise Japanese verb & adjective inflections (CLI).',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        '-i',
+        '--vocab_file',
+        help='the JSON with verbs and adjectives for the quiz',
+        type=str,
+        default='vocab.json',
     )
     parser.add_argument(
         '-K',
@@ -77,27 +87,28 @@ if __name__ == '__main__':
 
     words: list[dict]
     try:
-        with open('vocab.json') as vocab_file:
+        with open(args.vocab_file) as vocab_file:
             words = json.load(vocab_file)
     except FileNotFoundError:
         logging.error(
-            'the vocab.json file does not exist. please run `python3 make-vocab.py`'
-            + ' to build it.'
+            f'"{args.vocab_file}" does not exist. run `python3 make-vocab.py`'
+            + ' to build a vocab file.'
         )
         exit(1)
     except OSError:
-        logging.error('could not open vocab.json.')
+        logging.error(f'could not open "{args.vocab_file}".')
         raise
     except json.decoder.JSONDecodeError:
         logging.error(
-            'vocab.json is malformed. please rebuild it with `python3 make-vocab.py`.'
+            f'{args.vocab_file} is malformed. run `python3 make-vocab.py`'
+            + ' to build a new vocab file.'
         )
         exit(2)
 
     if not words:
         logging.error(
-            'error: vocab.json is malformed. please rebuild it with'
-            + ' `python3 make-vocab.py`.'
+            f'{args.vocab_file} is malformed. run `python3 make-vocab.py`'
+            + ' to build a new vocab file.'
         )
         exit(2)
 
