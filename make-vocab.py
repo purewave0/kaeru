@@ -29,6 +29,7 @@ import shutil
 import tempfile
 from typing import Any
 from os import path
+import logging
 
 from inflection import VerbType, AdjectiveType
 
@@ -106,18 +107,16 @@ if __name__ == '__main__':
         try:
             type_frequency_limit = int(sys.argv[1])
         except (TypeError, ValueError):
-            print(
-                'error: the amount to fetch must be an integer.'
-                + example,
-                file=sys.stderr
+            logging.error(
+                'the amount to fetch must be an integer.'
+                + example
             )
             exit(1)
 
         if type_frequency_limit < 1:
-            print(
-                'error: the amount to fetch must be greater than 0.'
-                + example,
-                file=sys.stderr
+            logging.error(
+                'the amount to fetch must be greater than 0.'
+                + example
             )
             exit(2)
 
@@ -143,10 +142,7 @@ if __name__ == '__main__':
     try:
         frequency_json = get_jpdb_frequency_list_json()
     except Exception:
-        print(
-            'error: could not fetch the JPDB frequency list.',
-            file=sys.stderr
-        )
+        logging.error('could not fetch the JPDB frequency list.')
         raise
 
     # first, we load the words from the JPDB frequency list json
@@ -174,10 +170,7 @@ if __name__ == '__main__':
     try:
         jmdict_json = get_simplified_jmdict_json()
     except Exception:
-        print(
-            'error: could not fetch the Simplified JMdict.',
-            file=sys.stderr
-        )
+        logging.error('could not fetch the Simplified JMdict.')
         raise
 
     # now we separate them into verbs and adjectives, also filling the type, kana, and
@@ -267,10 +260,7 @@ if __name__ == '__main__':
                 indent=0,
             )
     except OSError:
-        print(
-            'error: could not write the result to vocab.json.',
-            file=sys.stderr
-        )
+        logging.error('could not write the result to vocab.json.')
         raise
 
     print('done.')
