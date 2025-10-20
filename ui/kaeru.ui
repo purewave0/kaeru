@@ -33,6 +33,10 @@
   <property name="windowTitle">
    <string>kaeru</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>assets/kaeru.svg</normaloff>assets/kaeru.svg</iconset>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
   </property>
