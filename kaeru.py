@@ -44,6 +44,8 @@ class Kaeru(QMainWindow):
     """Words available for the quiz."""
     correct_answer: str
     """The correctly conjugated word."""
+    reveal_answer_on_failure: bool
+    """Whether the correct answer should be revealed when the user gets it wrong."""
     current_streak: int
     """The number of words the user has conjugated correctly in a row."""
     highest_streak: int
@@ -78,6 +80,9 @@ class Kaeru(QMainWindow):
         self.ui.option_show_word_type.toggled.connect(
             self.toggle_showing_word_type
         )
+        self.ui.option_reveal_answer_on_failure.toggled.connect(
+            self.toggle_revealing_answer_on_failure
+        )
         self.ui.action_about.triggered.connect(self.show_about_dialog)
 
         self.ui.option_show_kana_reading.setChecked(
@@ -85,6 +90,10 @@ class Kaeru(QMainWindow):
         )
         self.ui.option_show_word_type.setChecked(
             dbapi.get_show_word_type(self.conn)
+        )
+        self.reveal_answer_on_failure = dbapi.get_reveal_answer_on_failure(self.conn)
+        self.ui.option_reveal_answer_on_failure.setChecked(
+            self.reveal_answer_on_failure
         )
 
         self.current_streak = 0
@@ -188,11 +197,19 @@ class Kaeru(QMainWindow):
         )
 
     def notify_answer_was_incorrect(self) -> None:
-        """Temporarily flash the current streak's value red and show error feedback."""
+        """Temporarily flash the current streak's value red and show error feedback.
+        Include the correct answer if 'Reveal answer on failure' is checked.
+        """
         self.ui.current_streak.setStyleSheet('color: #ff4b3e')
         QTimer.singleShot(
             Kaeru.SCORE_COLOUR_FLASH_DURATION, self.reset_score_colour_change
         )
+        if self.reveal_answer_on_failure:
+            self.ui.feedback.setText(
+                f'The correct answer is <b>{self.correct_answer}</b>.'
+            )
+        else:
+            self.ui.feedback.setText('Incorrect answer; try again.')
         self.ui.feedback.show()
         QTimer.singleShot(
             Kaeru.FEEDBACK_DURATION, self.hide_feedback
@@ -219,6 +236,9 @@ class Kaeru(QMainWindow):
 
         Update scores accordingly.
         """
+        if self.ui.feedback.isVisible():
+            return
+
         answer = self.ui.answer.text().strip()
         if not answer:
             return
@@ -258,6 +278,14 @@ class Kaeru(QMainWindow):
         else:
             self.ui.word_type.hide()
         dbapi.set_show_word_type(self.conn, checked)
+
+    Slot()
+    def toggle_revealing_answer_on_failure(self, checked: bool) -> None:
+        """Show the correct answer after incorrect attempts if this option is checked,
+        and store it in the database.
+        """
+        self.reveal_answer_on_failure = checked
+        dbapi.set_reveal_answer_on_failure(self.conn, checked)
 
 
 if __name__ == "__main__":

@@ -54,6 +54,11 @@ class Ui_MainWindow(object):
         self.action_about = QAction(MainWindow)
         self.action_about.setObjectName(u"action_about")
         self.action_about.setMenuRole(QAction.MenuRole.AboutRole)
+        self.option_reveal_answer_on_failure = QAction(MainWindow)
+        self.option_reveal_answer_on_failure.setObjectName(u"option_reveal_answer_on_failure")
+        self.option_reveal_answer_on_failure.setCheckable(True)
+        self.option_reveal_answer_on_failure.setChecked(True)
+        self.option_reveal_answer_on_failure.setMenuRole(QAction.MenuRole.ApplicationSpecificRole)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
@@ -142,6 +147,7 @@ class Ui_MainWindow(object):
         self.feedback = QLabel(self.centralwidget)
         self.feedback.setObjectName(u"feedback")
         self.feedback.setEnabled(True)
+        self.feedback.setMinimumSize(QSize(0, 24))
         font4 = QFont()
         font4.setPointSize(12)
         self.feedback.setFont(font4)
@@ -222,6 +228,8 @@ class Ui_MainWindow(object):
         self.menuHelp = QMenu(self.menubar)
         self.menuHelp.setObjectName(u"menuHelp")
         self.menuHelp.setSeparatorsCollapsible(False)
+        self.menuPreferences = QMenu(self.menubar)
+        self.menuPreferences.setObjectName(u"menuPreferences")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -229,10 +237,12 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuView.menuAction())
+        self.menubar.addAction(self.menuPreferences.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
         self.menuView.addAction(self.option_show_kana_reading)
         self.menuView.addAction(self.option_show_word_type)
         self.menuHelp.addAction(self.action_about)
+        self.menuPreferences.addAction(self.option_reveal_answer_on_failure)
 
         self.retranslateUi(MainWindow)
 
@@ -247,6 +257,7 @@ class Ui_MainWindow(object):
         self.option_show_kana_reading.setText(QCoreApplication.translate("MainWindow", u"Kana reading", None))
         self.option_show_word_type.setText(QCoreApplication.translate("MainWindow", u"Word type", None))
         self.action_about.setText(QCoreApplication.translate("MainWindow", u"About", None))
+        self.option_reveal_answer_on_failure.setText(QCoreApplication.translate("MainWindow", u"Reveal answer on failure", None))
         self.word_to_conjugate.setText(QCoreApplication.translate("MainWindow", u"\u9ad8\u3044", None))
         self.kana_reading.setText(QCoreApplication.translate("MainWindow", u"\uff08\u305f\u304b\u3044\uff09", None))
         self.word_type.setText(QCoreApplication.translate("MainWindow", u"\u3044-adjective", None))
@@ -270,5 +281,6 @@ class Ui_MainWindow(object):
         self.highest_streak.setText(QCoreApplication.translate("MainWindow", u"0", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.menuPreferences.setTitle(QCoreApplication.translate("MainWindow", u"Preferences", None))
     # retranslateUi
 
