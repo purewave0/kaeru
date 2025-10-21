@@ -51,14 +51,14 @@ def set_highest_streak(connection: sqlite3.Connection, highest_streak: int) -> N
 
 
 def get_show_kana_reading(connection: sqlite3.Connection) -> bool:
-    """Set whether to show the kana reading."""
+    """Return whether to show the kana reading for words with kanji."""
     row = connection.execute(
         """SELECT show_kana_reading FROM User WHERE id = 1""",
     )
     return row.fetchone()[0]
 
 def set_show_kana_reading(connection: sqlite3.Connection, show_kana: bool) -> None:
-    """Set whether to show the kana reading."""
+    """Set whether to show the kana reading for words with kanji."""
     connection.execute(
         """UPDATE User SET show_kana_reading = ? WHERE id = 1""",
         (show_kana,)
@@ -67,7 +67,7 @@ def set_show_kana_reading(connection: sqlite3.Connection, show_kana: bool) -> No
 
 
 def get_show_word_type(connection: sqlite3.Connection) -> bool:
-    """Set whether to show the kana reading."""
+    """Return whether to show the word type."""
     row = connection.execute(
         """SELECT show_word_type FROM User WHERE id = 1""",
     )
