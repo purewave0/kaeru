@@ -8,7 +8,8 @@ def create_table_and_user_if_nexists(connection: sqlite3.Connection) -> None:
             id INTEGER PRIMARY KEY CHECK (id = 1),  -- ensure there's only 1 user
             highest_streak INT NOT NULL,
             show_kana_reading BOOLEAN NOT NULL,
-            show_word_type BOOLEAN NOT NULL
+            show_word_type BOOLEAN NOT NULL,
+            reveal_answer_on_failure BOOLEAN NOT NULL
         )
     """)
     user = connection.execute("""SELECT id from User where id = 1""")
@@ -16,12 +17,15 @@ def create_table_and_user_if_nexists(connection: sqlite3.Connection) -> None:
         connection.execute(
             """
                 INSERT INTO User (
-                    highest_streak, show_kana_reading, show_word_type
+                    highest_streak,
+                    show_kana_reading,
+                    show_word_type,
+                    reveal_answer_on_failure
                 ) VALUES (
-                    ?, ?, ?
+                    ?, ?, ?, ?
                 )
             """,
-            (0, True, True)
+            (0, True, True, True)
         )
     connection.commit()
 
@@ -74,5 +78,23 @@ def set_show_word_type(connection: sqlite3.Connection, show_word_type: bool) -> 
     connection.execute(
         """UPDATE User SET show_word_type = ? WHERE id = 1""",
         (show_word_type,)
+    )
+    connection.commit()
+
+
+def get_reveal_answer_on_failure(connection: sqlite3.Connection) -> bool:
+    """Return whether to reveal the correct answer after a failed attempt."""
+    row = connection.execute(
+        """SELECT reveal_answer_on_failure FROM User WHERE id = 1""",
+    )
+    return row.fetchone()[0]
+
+def set_reveal_answer_on_failure(
+    connection: sqlite3.Connection, reveal_answer_on_failure: bool
+) -> None:
+    """Set whether to reveal the correct answer after a failed attempt."""
+    connection.execute(
+        """UPDATE User SET reveal_answer_on_failure = ? WHERE id = 1""",
+        (reveal_answer_on_failure,)
     )
     connection.commit()
