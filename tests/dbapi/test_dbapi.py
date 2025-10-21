@@ -20,7 +20,8 @@ def connection() -> sqlite3.Connection:
             id INTEGER PRIMARY KEY CHECK (id = 1),
             highest_streak INT NOT NULL,
             show_kana_reading BOOLEAN NOT NULL,
-            show_word_type BOOLEAN NOT NULL
+            show_word_type BOOLEAN NOT NULL,
+            reveal_answer_on_failure BOOLEAN NOT NULL
         )
     """)
     user = connection.execute("""SELECT id from User where id = 1""")
@@ -28,12 +29,15 @@ def connection() -> sqlite3.Connection:
         connection.execute(
             """
                 INSERT INTO User (
-                    highest_streak, show_kana_reading, show_word_type
+                    highest_streak,
+                    show_kana_reading,
+                    show_word_type,
+                    reveal_answer_on_failure
                 ) VALUES (
-                    ?, ?, ?
+                    ?, ?, ?, ?
                 )
             """,
-            (0, True, True)
+            (0, True, True, False)
         )
     connection.commit()
     return connection
@@ -90,3 +94,20 @@ def test_set_show_word_type(connection: sqlite3.Connection) -> None:
     row = result.fetchone()
     show_word_type = row[0]
     assert not show_word_type
+
+
+def test_get_reveal_answer_on_failure(connection: sqlite3.Connection):
+    connection.execute(
+        """UPDATE User set reveal_answer_on_failure = TRUE where id=1"""
+    )
+    reveal_answer_on_failure = dbapi.get_show_word_type(connection)
+    assert reveal_answer_on_failure
+
+def test_set_reveal_answer_on_failure(connection: sqlite3.Connection) -> None:
+    dbapi.set_reveal_answer_on_failure(connection, False)
+    result = connection.execute(
+        """SELECT reveal_answer_on_failure FROM User WHERE id = 1"""
+    )
+    row = result.fetchone()
+    reveal_answer_on_failure = row[0]
+    assert not reveal_answer_on_failure
