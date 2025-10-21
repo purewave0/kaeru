@@ -58,7 +58,7 @@ Now, run kaeru:
 pyside6-project run
 ```
 
-If you'd like to practise through the terminal instead, run:
+If you'd like to practise in the terminal instead, run:
 ```sh
 python3 kaeru-cli.py
 ```
