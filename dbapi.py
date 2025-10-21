@@ -25,7 +25,7 @@ def create_table_and_user_if_nexists(connection: sqlite3.Connection) -> None:
                     ?, ?, ?, ?
                 )
             """,
-            (0, True, True, True)
+            (0, True, True, False)
         )
     connection.commit()
 
