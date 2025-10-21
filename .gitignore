@@ -4,10 +4,10 @@ __pycache__/
 
 .pytest_cache/
 
-*.mo
-*.pot
 # compiled UI files
 ui/ui_*.py
+# compiled translations
+i18n/*.qm
 
 env/
 

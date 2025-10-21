@@ -12,7 +12,7 @@ from typing import Any
 import sqlite3
 
 from PySide6.QtWidgets import QDialog, QMainWindow, QApplication
-from PySide6.QtCore import Slot, QTimer
+from PySide6.QtCore import QTranslator, Slot, QTimer
 from PySide6.QtGui import QScreen
 
 from ui.ui_kaeru import Ui_MainWindow
@@ -335,6 +335,10 @@ if __name__ == "__main__":
     logging.info(f'{len(words)} words loaded.')
 
     app = QApplication([])
+
+    translator = QTranslator()
+    translator.load('i18n/pt_BR')
+    app.installTranslator(translator)
 
     kaeru = Kaeru(words)
     kaeru.resize(800, 700)

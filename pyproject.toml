@@ -2,4 +2,4 @@
 name = "kaeru"
 
 [tool.pyside6-project]
-files = ["kaeru.py", "ui/kaeru.ui", "ui/about.ui"]
+files = ["kaeru.py", "ui/kaeru.ui", "ui/about.ui", "i18n/pt_BR.ts"]
