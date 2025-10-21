@@ -220,7 +220,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 830, 31))
+        self.menubar.setGeometry(QRect(0, 0, 830, 25))
+        self.menubar.setFont(font4)
         self.menubar.setDefaultUp(False)
         self.menubar.setNativeMenuBar(True)
         self.menuView = QMenu(self.menubar)
@@ -283,4 +284,3 @@ class Ui_MainWindow(object):
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuPreferences.setTitle(QCoreApplication.translate("MainWindow", u"Preferences", None))
     # retranslateUi
-
