@@ -112,25 +112,25 @@ class Kaeru(QMainWindow):
         """Show the nondefault features of the given verb inflection."""
         nondefault_features = []
         if inflection.base_form is VerbInflection.BaseForm.POLITE:
-            nondefault_features.append('POLITE')
+            nondefault_features.append(self.tr('POLITE'))
         elif inflection.base_form is VerbInflection.BaseForm.TE:
-            nondefault_features.append('て-FORM')
+            nondefault_features.append(self.tr('て-FORM'))
 
         if inflection.tense is VerbInflection.Tense.PAST:
-            nondefault_features.append('PAST')
+            nondefault_features.append(self.tr('PAST'))
         if inflection.polarity is VerbInflection.Polarity.NEGATIVE:
-            nondefault_features.append('NEGATIVE')
+            nondefault_features.append(self.tr('NEGATIVE'))
         self.ui.conjugation.setText(' '.join(nondefault_features))
 
     def show_adjective_inflection(self, inflection: AdjectiveInflection) -> None:
         """Show the nondefault features of the given adjective inflection."""
         nondefault_features = []
         if inflection.polarity is AdjectiveInflection.Polarity.NEGATIVE:
-            nondefault_features.append('NEGATIVE')
+            nondefault_features.append(self.tr('NEGATIVE'))
         if inflection.tense is AdjectiveInflection.Tense.PAST:
-            nondefault_features.append('PAST')
+            nondefault_features.append(self.tr('PAST'))
         if inflection.politeness is AdjectiveInflection.Politeness.POLITE:
-            nondefault_features.append('POLITE')
+            nondefault_features.append(self.tr('POLITE'))
         self.ui.conjugation.setText(' '.join(nondefault_features))
 
     def ask_new_random_word(self) -> None:
@@ -206,10 +206,11 @@ class Kaeru(QMainWindow):
         )
         if self.reveal_answer_on_failure:
             self.ui.feedback.setText(
-                f'The correct answer is <b>{self.correct_answer}</b>.'
+                self.tr(f'The correct answer is')
+                + f' <b>{self.correct_answer}</b>.'
             )
         else:
-            self.ui.feedback.setText('Incorrect answer; try again.')
+            self.ui.feedback.setText(self.tr('Incorrect answer; try again.'))
         self.ui.feedback.show()
         QTimer.singleShot(
             Kaeru.FEEDBACK_DURATION, self.hide_feedback
