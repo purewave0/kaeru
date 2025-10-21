@@ -298,7 +298,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '-i',
         '--vocab_file',
-        help='the JSON with verbs and adjectives for the quiz',
+        help='path to the JSON with verbs and adjectives for the quiz',
         type=str,
         default='vocab.json',
     )
