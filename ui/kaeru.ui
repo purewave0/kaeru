@@ -31,7 +31,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>kaeru</string>
+   <string notr="true">kaeru</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -62,7 +62,7 @@
        <cursorShape>IBeamCursor</cursorShape>
       </property>
       <property name="text">
-       <string>高い</string>
+       <string notr="true">高い</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -75,7 +75,7 @@
     <item>
      <widget class="QLabel" name="kana_reading">
       <property name="text">
-       <string>（たかい）</string>
+       <string notr="true">（たかい）</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -85,7 +85,7 @@
     <item>
      <widget class="QLabel" name="word_type">
       <property name="text">
-       <string>い-adjective</string>
+       <string notr="true">い-adjective</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -124,7 +124,7 @@
        </font>
       </property>
       <property name="text">
-       <string>POLITE</string>
+       <string notr="true">POLITE</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -157,6 +157,9 @@
         </property>
         <property name="styleSheet">
          <string notr="true">padding: 8px;</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
         </property>
         <property name="placeholderText">
          <string>Your answer</string>
@@ -304,7 +307,7 @@
            </font>
           </property>
           <property name="text">
-           <string>0</string>
+           <string notr="true">0</string>
           </property>
          </widget>
         </item>
@@ -350,7 +353,7 @@
            </size>
           </property>
           <property name="text">
-           <string>0</string>
+           <string notr="true">0</string>
           </property>
          </widget>
         </item>
