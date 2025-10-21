@@ -101,7 +101,7 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '-n',
-        '--limit_per_type',
+        '--limit-per-type',
         help='the maximum number of verbs and adjectives to fetch',
         type=int,
         default=100,
