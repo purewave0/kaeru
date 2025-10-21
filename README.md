@@ -1,4 +1,4 @@
-:uk: **English** | [:brazil: Português](README.pt-br.md) (TODO)
+:uk: **English** | [:brazil: Português](README.pt-br.md)
 
 # kaeru
 
@@ -14,7 +14,7 @@ Japanese verb & adjective conjugation trainer for learners of all levels.
 - Shows kana reading, word type
 - Streak-based score tracker
 - GUI (Qt) & CLI available
-- Internationalisation: available in English, [Portuguese](README.pt-br.md)(TODO)
+- Internationalisation: available in English, [Portuguese](README.pt-br.md)
 - Cross-platform
 
 The name comes from 変える (to change, to transform) and カエル (frog 🐸), both read as
