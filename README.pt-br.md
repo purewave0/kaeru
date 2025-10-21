@@ -10,7 +10,7 @@ níveis.
 - Treino ágil e focado
 - Aleatoriamente seleciona uma palavra (verbo/adjetivo) e uma flexão-alvo
 - Pede a conjugação correta da palavra apresentada
-- Gerador de vocabulário escolhe as palavras mais comuns pela mídia japonesa
+- Gerador de vocabulário escolhe as palavras mais comuns da mídia japonesa
 - Vocabulário em JSON simples e customizável
 - Exibe leitura em kana, tipo de palavra
 - Contador de pontuação sequencial
