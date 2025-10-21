@@ -97,7 +97,7 @@ if __name__ == '__main__':
             words = json.load(vocab_file)
     except FileNotFoundError:
         logging.error(
-            f'"{args.vocab_file}" does not exist. run `python3 make-vocab.py`'
+            f'"{args.vocab_file}" does not exist. run `python3 gen-vocab.py`'
             + ' to build a vocab file.'
         )
         exit(1)
@@ -106,14 +106,14 @@ if __name__ == '__main__':
         raise
     except json.decoder.JSONDecodeError:
         logging.error(
-            f'{args.vocab_file} is malformed. run `python3 make-vocab.py`'
+            f'{args.vocab_file} is malformed. run `python3 gen-vocab.py`'
             + ' to build a new vocab file.'
         )
         exit(2)
 
     if not words:
         logging.error(
-            f'{args.vocab_file} is malformed. run `python3 make-vocab.py`'
+            f'{args.vocab_file} is malformed. run `python3 gen-vocab.py`'
             + ' to build a new vocab file.'
         )
         exit(2)

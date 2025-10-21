@@ -11,7 +11,7 @@ env/
 
 .ropeproject
 
-# the vocab JSON built by make-vocab.py
+# the vocab JSON built by gen-vocab.py
 vocab.json
 
 db.sqlite3
