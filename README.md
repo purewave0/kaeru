@@ -4,7 +4,7 @@
 
 Japanese verb & adjective conjugation trainer for learners of all levels.
 
-(TODO) ![kaeru screenshot](assets/screenshot.png "Screenshot")
+![kaeru screenshot](assets/screenshot.png "Screenshot")
 
 - Fast and focused practising
 - Randomly selects a word (verb/adjective) and a target inflection
