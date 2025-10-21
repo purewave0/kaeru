@@ -83,6 +83,12 @@ if __name__ == '__main__':
         action='store_true',
         help="""don't display the word type ("5-dan verb", "い-adjective", etc.)"""
     )
+    parser.add_argument(
+        '-r',
+        '--reveal-answer',
+        action='store_true',
+        help="""reveal the correct answer after an incorrect attempt"""
+    )
     args = parser.parse_args()
 
     words: list[dict]
@@ -199,5 +205,10 @@ if __name__ == '__main__':
                 break
 
             current_streak = 0
-            print('wrong answer! try again.\n')
+            if args.reveal_answer:
+                print(
+                    f'the correct answer is 「{correctly_conjugated_word}」. try again.\n'
+                )
+            else:
+                print('wrong answer! try again.\n')
             sleep(ATTEMPT_INTERVAL_SECONDS)
