@@ -1,0 +1,124 @@
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+env:
+  RELEASE_TAG: ${{ github.ref_name }}
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, windows-latest, macos-latest]
+    outputs:
+      artifact-name: ${{ steps.create-zip.outputs.name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install Nuitka==2.7.11
+        shell: bash
+
+      - name: Build project
+        run: pyside6-project build
+
+      - name: Build gen-vocab binary
+        id: build-gen-vocab-binary
+        run: |
+          binary_filename='gen-vocab'
+          if [[ "${{ matrix.os }}" == 'windows-latest' ]]; then
+            binary_filename+='.exe'
+          fi
+          echo "binary=${binary_filename}" >> $GITHUB_OUTPUT
+
+          python3 -m nuitka \
+            --output-dir=build --output-filename="${binary_filename}" --onefile \
+            --follow-imports --assume-yes-for-downloads \
+            gen-vocab.py
+
+          chmod +x build/${binary_filename}
+        shell: bash
+
+      - name: Build kaeru binary
+        id: build-kaeru-binary
+        run: |
+          binary_filename='kaeru'
+          if [[ "${{ matrix.os }}" == 'windows-latest' ]]; then
+            binary_filename+='.exe'
+          fi
+          echo "binary=${binary_filename}" >> $GITHUB_OUTPUT
+
+          python3 -m nuitka \
+            --output-dir=build --output-filename="${binary_filename}" --onefile \
+            --plugin-enable=pyside6 --follow-imports --assume-yes-for-downloads \
+            --include-qt-plugins=sensible,platforminputcontexts \
+            kaeru.py
+
+          chmod +x build/${binary_filename}
+        shell: bash
+
+      - name: Create zip artifact
+        id: create-zip
+        run: |
+          platform=$(printf "${{ matrix.os }}" | sed 's/-latest//')
+          zip_name="kaeru-${platform}-${RELEASE_TAG}.zip"
+          echo "name=${zip_name}" >> $GITHUB_OUTPUT
+
+          mkdir -p kaeru
+          cp \
+            build/${{ steps.build-gen-vocab-binary.outputs.binary }} \
+            build/${{ steps.build-kaeru-binary.outputs.binary }} \
+            kaeru/
+
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            powershell -Command "Compress-Archive -Path './kaeru/*' -DestinationPath \
+              './${zip_name}' -Force"
+          else
+            zip -r -X "${zip_name}" kaeru/
+          fi
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ env.RELEASE_TAG }}
+
+      - name: Upload zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.create-zip.outputs.name }}
+          path: ${{ steps.create-zip.outputs.name }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: artifacts
+          merge-multiple: true # put them in the same directory
+
+      - name: Upload zips to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_TAG }}
+          body: Release ${{ env.RELEASE_TAG }}
+          files: |
+            artifacts/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -9,6 +9,10 @@ ui/ui_*.py
 # compiled translations
 i18n/*.qm
 
+# building
+build/
+nuitka-crash-report.xml
+
 env/
 
 .ropeproject
