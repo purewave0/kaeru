@@ -25,7 +25,7 @@ For example:
 import argparse
 import json
 from multiprocessing import Pool
-import sys
+from sys import exit
 import urllib.request
 import shutil
 import tempfile

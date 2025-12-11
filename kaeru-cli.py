@@ -4,7 +4,7 @@ import argparse
 import json
 import random
 import sqlite3
-import sys
+from sys import exit
 from time import sleep
 import readline
 assert readline  # silence linter error

@@ -7,8 +7,8 @@ from collections.abc import Sequence
 import json
 import logging
 import random
-import sys
 from typing import Any
+from sys import exit
 import sqlite3
 
 from PySide6.QtWidgets import QDialog, QMainWindow, QApplication
@@ -349,4 +349,4 @@ if __name__ == "__main__":
     geometry.moveCenter(center)
     kaeru.move(geometry.topLeft())
 
-    sys.exit(app.exec())
+    exit(app.exec())
